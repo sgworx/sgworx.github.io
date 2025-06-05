@@ -1,25 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>My Website</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
+/* Reset */
+body, h1, h2, h3, p, ul, li, a {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-<header>
-  <h1>Shraddha Ghuge</h1>
-  <h2>Architectural and AI technologist</h2>
-  <nav>
-    <ul>
-      <li><a href="/">Home</a></li>
-    </ul>
-  </nav>
-</header>
+/* General body styling */
+body {
+  background-color: #f4f4f4;
+  font-family: 'Courier New', monospace;
+  color: #1a1a1a;
+  padding: 40px;
+  line-height: 1.6;
+}
 
-<img src="6049e64f-b8a5-4d2b-8234-8f7bc63b1922.png" alt="Shraddha Ghuge">
+/* Header Styling */
+header {
+  width: 65%;
+  float: left;
+  padding-right: 5%;
+}
 
-<p>I'm an architect</p>
-<p>Hello world!</p>
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
-</body>
-</html>
+h2 {
+  font-size: 18px;
+  font-weight: normal;
+  color: #0047ff;
+  margin-bottom: 20px;
+}
+
+/* Navigation */
+nav ul {
+  list-style-type: none;
+  margin-bottom: 20px;
+}
+
+nav li {
+  display: inline;
+  margin-right: 15px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #0047ff;
+}
+
+/* Image Styling */
+img {
+  width: 30%;
+  float: right;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+/* Paragraphs */
+p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+
+/* Clearfix */
+body::after {
+  content: "";
+  display: block;
+  clear: both;
+}
