@@ -1,26 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Shraddha Ghuge</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Objects Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
 </head>
 <body>
+    <div id="container"></div>
+    
+    <!-- Loading screen -->
+    <div id="loading-screen">
+        <div class="loading-spinner"></div>
+    </div>
 
-<header>
-  <h1>Shraddha Ghuge</h1>
-  <h2>Architectural and AI technologist</h2>
-  <nav>
-    <ul>
-      <li><a href="/">Home</a></li>
-    </ul>
-  </nav>
-</header>
-
-<img src="https://images.squarespace-cdn.com/content/v1/680d6f258d226a3a4be7f52f/93be6c86-a3d3-4832-af36-e71b123b609d/SGbw.jpg?format=2500w" alt="Shraddha Ghuge">
-<p>I'm an architect</p>
-<p>I’m interested in  spatial design, creative direction, and advanced fabrication.  
-I focus on embedding AI into my design process to build intelligent, responsive design infrastructures for architecture and the other realms of design. I build tools and frameworks that connect technologies to real design needs. This makes it easier to navigate between experimentation and scalable application. 
-The intention is not to automate creativity but to interrogate the system and make design as agile as the character it’s supposed to reflect.</p>
-
+    <script src="script.js"></script>
 </body>
 </html>
