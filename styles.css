@@ -69,3 +69,68 @@ body:active {
         border-width: 2px;
     }
 }
+
+/* Navigation dots - BAM Works style */
+.nav-dots {
+    position: fixed;
+    bottom: 3.125%;
+    left: 3.125%;
+    display: flex;
+    gap: 0.4rem;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.nav-dot {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot-circle {
+    width: 100%;
+    height: 100%;
+    background: #c7c7c7;
+    border-radius: 50%;
+    opacity: 0.5;
+    transition: all 0.15s ease;
+}
+
+.nav-dot.active .dot-circle {
+    opacity: 1;
+}
+
+.nav-dot:hover .dot-circle {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.dot-number {
+    position: absolute;
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    pointer-events: none;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .nav-dots {
+        bottom: 20px;
+        left: 20px;
+    }
+    
+    .nav-dot {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .dot-number {
+        font-size: 12px;
+    }
+}
