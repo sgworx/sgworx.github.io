@@ -20,24 +20,31 @@
     
     <!-- Step slider interface -->
     <div id="step-slider" class="step-slider hidden">
-        <div class="progress-line"></div>
+        <div class="progress-line">
+            <div class="progress-circle"></div>
+        </div>
+        
+        <!-- Top-left step indicator under logo -->
+        <div class="step-top-left">
+            <div class="step-top-left-label">STEP</div>
+            <div class="step-top-left-circle" id="step-top-left-number">1</div>
+            <div class="step-top-left-title" id="step-top-left-title">Select Image</div>
+        </div>
+        
+        <!-- Manual slider control -->
+        <div class="manual-slider">
+            <input type="range" id="step-range" min="1" max="4" value="1" step="0.01" class="slider-input">
+            <div class="slider-labels">
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+            </div>
+        </div>
+        
         <div class="slider-container">
             <!-- Step 1: Select Image -->
             <div class="step-slide active" data-step="1">
-                <div class="step-header">
-                    <div class="step-indicator">
-                        <div class="step-circle current">
-                            <img src="Assets/slider.png" alt="Step 1">
-                        </div>
-                        <span class="step-title">Select Image</span>
-                    </div>
-                    <div class="next-step-indicator">
-                        <div class="step-circle next">
-                            <img src="Assets/slider.png" alt="Step 2">
-                        </div>
-                        <div class="arrow-button">→</div>
-                    </div>
-                </div>
                 
                 <div class="upload-area">
                     <div class="upload-box">
@@ -68,20 +75,6 @@
             
             <!-- Step 2: Design Prompt -->
             <div class="step-slide next" data-step="2">
-                <div class="step-header">
-                    <div class="step-indicator">
-                        <div class="step-circle current">
-                            <img src="Assets/slider.png" alt="Step 2">
-                        </div>
-                        <span class="step-title">Design Prompt</span>
-                    </div>
-                    <div class="next-step-indicator">
-                        <div class="step-circle next">
-                            <img src="Assets/slider.png" alt="Step 3">
-                        </div>
-                        <div class="arrow-button">→</div>
-                    </div>
-                </div>
                 
                 <div class="step-content">
                     <h2>Step 2: Design Prompt</h2>
@@ -91,20 +84,6 @@
             
             <!-- Step 3: Choose Design -->
             <div class="step-slide next" data-step="3">
-                <div class="step-header">
-                    <div class="step-indicator">
-                        <div class="step-circle current">
-                            <img src="Assets/slider.png" alt="Step 3">
-                        </div>
-                        <span class="step-title">Choose Design</span>
-                    </div>
-                    <div class="next-step-indicator">
-                        <div class="step-circle next">
-                            <img src="Assets/slider.png" alt="Step 4">
-                        </div>
-                        <div class="arrow-button">→</div>
-                    </div>
-                </div>
                 
                 <div class="step-content">
                     <h2>Step 3: Choose Design</h2>
@@ -114,17 +93,6 @@
             
             <!-- Step 4: Get it ready -->
             <div class="step-slide next" data-step="4">
-                <div class="step-header">
-                    <div class="step-indicator">
-                        <div class="step-circle current">
-                            <img src="Assets/slider.png" alt="Step 4">
-                        </div>
-                        <span class="step-title">Get it ready</span>
-                    </div>
-                    <div class="next-step-indicator">
-                        <!-- No next step for the last slide -->
-                    </div>
-                </div>
                 
                 <div class="step-content">
                     <h2>Step 4: Get it ready</h2>

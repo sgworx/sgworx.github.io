@@ -421,11 +421,14 @@ class Scene3D {
     showStepSlider() {
         const slider = document.getElementById('step-slider');
         const logo = document.querySelector('.top-logo');
+        const stepRange = document.getElementById('step-range');
+        
         slider.classList.remove('hidden');
         logo.classList.add('visible');
         
         // Reset to step 1 and update progress line
         this.currentStep = 1;
+        stepRange.value = 1;
         this.updateProgressLine();
     }
     
@@ -440,6 +443,7 @@ class Scene3D {
         const thumbnails = document.querySelectorAll('.image-thumbnail');
         const arrowButtons = document.querySelectorAll('.arrow-button');
         const uploadBox = document.querySelector('.upload-box');
+        const stepRange = document.getElementById('step-range');
         this.currentStep = 1;
         
         // Handle thumbnail selection
@@ -475,7 +479,21 @@ class Scene3D {
         arrowButtons.forEach(button => {
             button.addEventListener('click', () => {
                 this.slideToNextStep();
+                // Update slider position
+                stepRange.value = this.currentStep;
             });
+        });
+        
+        // Handle manual slider input with continuous movement
+        stepRange.addEventListener('input', (e) => {
+            const sliderValue = parseFloat(e.target.value);
+            this.updateContinuousSlider(sliderValue);
+        });
+        
+        // Also handle change event for final positioning
+        stepRange.addEventListener('change', (e) => {
+            const newStep = Math.round(parseFloat(e.target.value));
+            this.slideToStep(newStep);
         });
         
         // Close slider with Escape key
@@ -529,6 +547,55 @@ class Scene3D {
             
             console.log(`Slided back to step ${this.currentStep}`);
         }
+    }
+    
+    slideToStep(targetStep) {
+        if (targetStep === this.currentStep) return;
+        
+        const slides = document.querySelectorAll('.step-slide');
+        
+        // Reset all slides
+        slides.forEach(slide => {
+            slide.classList.remove('active', 'prev', 'next');
+            const stepNum = parseInt(slide.dataset.step);
+            
+            if (stepNum === targetStep) {
+                slide.classList.add('active');
+            } else if (stepNum < targetStep) {
+                slide.classList.add('prev');
+            } else {
+                slide.classList.add('next');
+            }
+        });
+        
+        this.currentStep = targetStep;
+        this.updateProgressLine();
+        
+        console.log(`Slided to step ${this.currentStep}`);
+    }
+    
+    updateContinuousSlider(sliderValue) {
+        const progressLine = document.querySelector('.progress-line');
+        const totalSteps = 4;
+        
+        // Calculate position as percentage of screen width based on continuous slider value
+        const progressPercent = ((sliderValue - 1) / (totalSteps - 1)) * 100;
+        progressLine.style.left = `${progressPercent}%`;
+        
+        // Update slide positions based on slider value
+        const slides = document.querySelectorAll('.step-slide');
+        slides.forEach(slide => {
+            slide.classList.remove('active', 'prev', 'next');
+            const stepNum = parseInt(slide.dataset.step);
+            
+            if (Math.abs(stepNum - sliderValue) < 0.5) {
+                slide.classList.add('active');
+            } else if (stepNum < sliderValue) {
+                slide.classList.add('prev');
+            } else {
+                slide.classList.add('next');
+            }
+        });
     }
     
     updateProgressLine() {

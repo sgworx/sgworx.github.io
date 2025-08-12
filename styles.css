@@ -205,14 +205,105 @@ body:active {
 /* Progress line that slides left to right */
 .progress-line {
     position: absolute;
-    left: 0;
-    top: 50%;
-    width: 3px;
+    left: 75%;
+    top: 0;
+    width: 1px;
     height: 100vh;
-    background: #2196F3;
+    background: #000000;
+    transition: left 0.6s ease-out;
+    z-index: 10;
+}
+
+/* Progress circle that moves along the line */
+.progress-circle {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: #000000;
+    border-radius: 50%;
+    top: 50%;
+    left: -30px; /* Center on the line */
     transform: translateY(-50%);
-    transition: left 0.5s ease-in-out;
-    z-index: 1;
+    transition: all 0.6s ease-out;
+    z-index: 11;
+    cursor: grab;
+}
+
+.progress-circle:active {
+    cursor: grabbing;
+}
+
+/* Hidden manual slider for dragging functionality */
+.manual-slider {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 12;
+    pointer-events: none;
+}
+
+.slider-input {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: transparent;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transform: translateY(-50%);
+    pointer-events: all;
+    cursor: grab;
+}
+
+.slider-input:active {
+    cursor: grabbing;
+}
+
+.slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: transparent;
+    cursor: grab;
+}
+
+.slider-input::-moz-range-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: transparent;
+    cursor: grab;
+    border: none;
+}
+
+/* Hide the labels */
+.slider-labels {
+    display: none;
+}
+
+/* Step title in bottom left */
+.step-title-bottom {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    z-index: 5;
+}
+
+@media (max-width: 768px) {
+    .step-title-bottom {
+        bottom: 30px;
+        left: 30px;
+        font-size: 16px;
+    }
 }
 
 .step-slider.hidden {
@@ -344,7 +435,7 @@ body:active {
 .upload-box {
     width: 500px;
     height: 300px;
-    border: 3px dashed #2196F3;
+    border: 3px dashed #F3E831;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -356,8 +447,8 @@ body:active {
 }
 
 .upload-box:hover {
-    background: #f0f4ff;
-    border-color: #1976D2;
+    background: #fffbe6;
+    border-color: #C8BA00;
 }
 
 .upload-icon {
@@ -369,8 +460,8 @@ body:active {
 }
 
 .image-icon {
-    background: #2196F3;
-    color: white;
+    background: #F3E831;
+    color: #000;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -380,8 +471,8 @@ body:active {
 }
 
 .plus-icon {
-    background: #4CAF50;
-    color: white;
+    background: #000;
+    color: #fff;
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -432,8 +523,8 @@ body:active {
     right: 5px;
     width: 24px;
     height: 24px;
-    background: #2196F3;
-    color: white;
+    background: #F3E831;
+    color: #000;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -484,5 +575,56 @@ body:active {
         flex-direction: column;
         gap: 20px;
         align-items: flex-start;
+    }
+}
+
+/* Top-left step indicator */
+.step-top-left {
+    position: fixed;
+    top: 70px; /* under the logo */
+    left: 20px;
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.step-top-left-label {
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: #F3E831;
+}
+
+.step-top-left-circle {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 3px solid #F3E831;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 500;
+    color: #000;
+    background: #fff;
+}
+
+.step-top-left-title {
+    font-size: 16px;
+    color: #444;
+}
+
+@media (max-width: 768px) {
+    .step-top-left {
+        top: 60px;
+        left: 15px;
+    }
+    .step-top-left-circle {
+        width: 46px;
+        height: 46px;
+        font-size: 18px;
+    }
+    .step-top-left-title {
+        font-size: 14px;
     }
 }
