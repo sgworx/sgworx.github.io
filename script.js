@@ -16,6 +16,11 @@ class Scene3D {
         this.pointer = new THREE.Vector2(0, 0); // normalized device coords
         this.parallaxStrength = 0.15; // Subtle parallax like BAM Works
         
+        // Slider smoothing state
+        this.currentSliderValue = 1; // smoothed value
+        this.targetSliderValue = 1; // target value from input
+        this.sliderAnimating = false;
+        
         this.modelFiles = [
             'Assets/1.glb',
             'Assets/2.glb',
@@ -429,7 +434,9 @@ class Scene3D {
         // Reset to step 1 and update progress line
         this.currentStep = 1;
         stepRange.value = 1;
-        this.updateProgressLine();
+        this.currentSliderValue = 1;
+        this.targetSliderValue = 1;
+        this.applySliderVisuals(1);
     }
     
     hideStepSlider() {
@@ -481,6 +488,7 @@ class Scene3D {
                 this.slideToNextStep();
                 // Update slider position
                 stepRange.value = this.currentStep;
+                this.updateContinuousSlider(this.currentStep);
             });
         });
         
@@ -520,7 +528,7 @@ class Scene3D {
             nextSlide.classList.remove('next');
             nextSlide.classList.add('active');
             
-            // Update progress line position
+            // Update progress line
             this.updateProgressLine();
             
             console.log(`Slided to step ${this.currentStep}`);
@@ -542,7 +550,7 @@ class Scene3D {
             prevSlide.classList.remove('prev');
             prevSlide.classList.add('active');
             
-            // Update progress line position
+            // Update progress line
             this.updateProgressLine();
             
             console.log(`Slided back to step ${this.currentStep}`);
@@ -575,22 +583,45 @@ class Scene3D {
     }
     
     updateContinuousSlider(sliderValue) {
+        // Set new target and start animating toward it for smoother control
+        this.targetSliderValue = sliderValue;
+        if (!this.sliderAnimating) {
+            this.animateSliderTowardsTarget();
+        }
+    }
+    
+    animateSliderTowardsTarget() {
+        this.sliderAnimating = true;
+        const step = () => {
+            const delta = this.targetSliderValue - this.currentSliderValue;
+            if (Math.abs(delta) < 0.001) {
+                this.currentSliderValue = this.targetSliderValue;
+                this.applySliderVisuals(this.currentSliderValue);
+                this.sliderAnimating = false;
+                return;
+            }
+            // Damping factor controls "speed" (lower = slower, more control)
+            this.currentSliderValue += delta * 0.12;
+            this.applySliderVisuals(this.currentSliderValue);
+            requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+    }
+    
+    applySliderVisuals(value) {
         const progressLine = document.querySelector('.progress-line');
-        const totalSteps = 4;
-        
-        // Calculate position as percentage of screen width based on continuous slider value
-        const progressPercent = ((sliderValue - 1) / (totalSteps - 1)) * 100;
+        const basePercent = 75; // 3rd division end
+        const stepOffset = 8;   // movement per step
+        const progressPercent = basePercent + ((value - 1) * stepOffset);
         progressLine.style.left = `${progressPercent}%`;
         
-        // Update slide positions based on slider value
         const slides = document.querySelectorAll('.step-slide');
         slides.forEach(slide => {
             slide.classList.remove('active', 'prev', 'next');
             const stepNum = parseInt(slide.dataset.step);
-            
-            if (Math.abs(stepNum - sliderValue) < 0.5) {
+            if (Math.abs(stepNum - value) < 0.5) {
                 slide.classList.add('active');
-            } else if (stepNum < sliderValue) {
+            } else if (stepNum < value) {
                 slide.classList.add('prev');
             } else {
                 slide.classList.add('next');
@@ -599,13 +630,8 @@ class Scene3D {
     }
     
     updateProgressLine() {
-        const progressLine = document.querySelector('.progress-line');
-        const totalSteps = 4; // We have 4 steps
-        
-        // Calculate position as percentage of screen width
-        // Step 1: 0%, Step 2: 33.33%, Step 3: 66.66%, Step 4: 100%
-        const progressPercent = ((this.currentStep - 1) / (totalSteps - 1)) * 100;
-        progressLine.style.left = `${progressPercent}%`;
+        // Animate to the discrete step position smoothly
+        this.updateContinuousSlider(this.currentStep);
     }
     
     animate() {
