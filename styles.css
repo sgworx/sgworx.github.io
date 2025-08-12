@@ -70,67 +70,90 @@ body:active {
     }
 }
 
-/* Navigation dots - BAM Works style */
-.nav-dots {
+/* Navigation steps */
+.nav-steps {
     position: fixed;
     bottom: 3.125%;
     left: 3.125%;
     display: flex;
-    gap: 0.4rem;
+    gap: 2rem;
     z-index: 1000;
     pointer-events: none;
 }
 
-.nav-dot {
-    position: relative;
-    width: 30px;
-    height: 30px;
+.nav-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     cursor: pointer;
     pointer-events: all;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.dot-circle {
-    width: 100%;
-    height: 100%;
-    background: #c7c7c7;
-    border-radius: 50%;
-    opacity: 0.5;
     transition: all 0.15s ease;
 }
 
-.nav-dot.active .dot-circle {
-    opacity: 1;
+.step-circle {
+    width: 60px;
+    height: 60px;
+    background: #c7c7c7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    transition: all 0.15s ease;
+    border: 3px solid transparent;
 }
 
-.nav-dot:hover .dot-circle {
-    opacity: 1;
-    transform: scale(1.1);
+.nav-step.active .step-circle {
+    background: #ffffff;
+    border: 3px solid #2196F3;
 }
 
-.dot-number {
-    position: absolute;
-    font-size: 14px;
-    font-weight: 400;
-    color: #fff;
-    pointer-events: none;
+.nav-step:hover .step-circle {
+    transform: scale(1.05);
+}
+
+.step-number {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
     user-select: none;
 }
 
+.nav-step.active .step-number {
+    color: #2196F3;
+}
+
+.step-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
+    text-align: center;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.nav-step.active .step-label {
+    color: #2196F3;
+    font-weight: 500;
+}
+
 @media (max-width: 768px) {
-    .nav-dots {
+    .nav-steps {
         bottom: 20px;
         left: 20px;
+        gap: 1.5rem;
     }
     
-    .nav-dot {
-        width: 25px;
-        height: 25px;
+    .step-circle {
+        width: 50px;
+        height: 50px;
     }
     
-    .dot-number {
+    .step-number {
+        font-size: 20px;
+    }
+    
+    .step-label {
         font-size: 12px;
     }
 }

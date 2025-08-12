@@ -387,6 +387,25 @@ class Scene3D {
             event.preventDefault();
             this.onMouseClick(event.changedTouches[0]);
         });
+        
+        // Navigation dots click functionality
+        this.setupNavDots();
+    }
+    
+    setupNavDots() {
+        const navSteps = document.querySelectorAll('.nav-step');
+        
+        navSteps.forEach((step, index) => {
+            step.addEventListener('click', () => {
+                // Remove active class from all steps
+                navSteps.forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked step
+                step.classList.add('active');
+                
+                console.log(`Navigation step ${index + 1} clicked`);
+            });
+        });
     }
     
     animate() {
