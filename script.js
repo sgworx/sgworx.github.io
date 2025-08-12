@@ -107,14 +107,16 @@ class Scene3D {
                 console.log(`[${i}] Model loaded, adding to scene`);
                 this.scene.add(model);
                 
-                console.log(`[${i}] Position before centering:`, model.position.toArray());
-                // Prepare the model first, then position and animate
+                console.log(`[${i}] Position before positioning:`, model.position.toArray());
+                
+                // Position FIRST, then scale
+                this.positionModelCloud(model, i);
+                console.log(`[${i}] Position after cloud positioning:`, model.position.toArray());
+                
                 this.centerAndScaleModel(model);
-                console.log(`[${i}] Position after centering:`, model.position.toArray());
+                console.log(`[${i}] Position after scaling:`, model.position.toArray());
                 
                 this.enableShadows(model);
-                this.positionModelCloud(model, i);
-                console.log(`[${i}] Final position after cloud positioning:`, model.position.toArray());
                 
                 this.addFloatingOrbitAnimation(model, i);
                 
@@ -193,21 +195,18 @@ class Scene3D {
     }
     
     centerAndScaleModel(model) {
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-        
-        // Center the model's geometry, not its position
-        model.traverse((child) => {
-            if (child.isMesh) {
-                child.geometry.translate(-center.x, -center.y, -center.z);
-            }
-        });
+        // First, position the model in the cloud BEFORE centering
+        // This way centering won't override our positioning
         
         // Scale to fit in view - significantly larger scale
+        const box = new THREE.Box3().setFromObject(model);
+        const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 10.0 / maxDim; // Significantly larger scale for better visibility
+        const scale = 10.0 / maxDim;
         model.scale.setScalar(scale);
+        
+        // DON'T center the model - let it keep its position
+        console.log("Skipping centering to preserve position");
     }
     
     enableShadows(model) {
