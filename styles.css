@@ -233,6 +233,21 @@ body:active {
     cursor: grabbing;
 }
 
+/* Arrow indicator pointing towards step 2 (right side) */
+.progress-circle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 58%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 12px solid #fff; /* white arrow */
+    pointer-events: none;
+}
+
 /* Hidden manual slider for dragging functionality */
 .manual-slider {
     position: fixed;
