@@ -471,7 +471,18 @@ class Scene3D {
                 indicator.textContent = 'A';
                 thumbnail.appendChild(indicator);
                 
+                // Get the image source from the clicked thumbnail
+                const thumbnailImg = thumbnail.querySelector('img');
+                const imageSrc = thumbnailImg.src;
                 const imageName = thumbnail.dataset.image;
+                
+                // Update the upload box to show the selected image
+                const uploadBox = document.querySelector('.upload-box');
+                const uploadBoxImg = uploadBox.querySelector('img');
+                
+                uploadBoxImg.src = imageSrc;
+                uploadBox.classList.add('has-image');
+                
                 console.log(`Selected image: ${imageName}`);
             });
         });
