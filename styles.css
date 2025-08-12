@@ -91,8 +91,8 @@ body:active {
 }
 
 .step-circle {
-    width: 60px;
-    height: 60px;
+    width: 120px;
+    height: 120px;
     background: #c7c7c7;
     border-radius: 50%;
     display: flex;
@@ -105,7 +105,7 @@ body:active {
 
 .nav-step.active .step-circle {
     background: #ffffff;
-    border: 3px solid #2196F3;
+    border: 3px solid #F3E831;
 }
 
 .nav-step:hover .step-circle {
@@ -113,14 +113,14 @@ body:active {
 }
 
 .step-number {
-    font-size: 24px;
+    font-size: 48px;
     font-weight: 600;
     color: #333;
     user-select: none;
 }
 
 .nav-step.active .step-number {
-    color: #2196F3;
+    color: #F3E831;
 }
 
 .step-label {
@@ -133,7 +133,7 @@ body:active {
 }
 
 .nav-step.active .step-label {
-    color: #2196F3;
+    color: #F3E831;
     font-weight: 500;
 }
 
@@ -145,12 +145,12 @@ body:active {
     }
     
     .step-circle {
-        width: 50px;
-        height: 50px;
+        width: 100px;
+        height: 100px;
     }
     
     .step-number {
-        font-size: 20px;
+        font-size: 40px;
     }
     
     .step-label {
