@@ -679,6 +679,35 @@ class Scene3D {
             };
             stepTitleEl.textContent = titles[activeStep] || '';
         }
+        // Update next step badge (always black with next step number)
+        const nextBadge = document.getElementById('next-step-badge');
+        if (nextBadge) {
+            const next = Math.min(4, activeStep + 1);
+            if (next === activeStep) {
+                nextBadge.classList.add('hidden');
+            } else {
+                nextBadge.textContent = String(next);
+                nextBadge.classList.remove('hidden');
+            }
+        }
+        
+        // Update canvas backgrounds based on current step
+        const stepSlider = document.querySelector('.step-slider');
+        if (stepSlider) {
+            if (activeStep === 1) {
+                // Step 1: Left canvas white, right canvas black
+                stepSlider.style.setProperty('--left-canvas-bg', '#ffffff');
+                stepSlider.style.setProperty('--right-canvas-bg', '#000000');
+            } else if (activeStep === 2) {
+                // Step 2: Both canvases white
+                stepSlider.style.setProperty('--left-canvas-bg', '#ffffff');
+                stepSlider.style.setProperty('--right-canvas-bg', '#ffffff');
+            } else {
+                // Steps 3-4: Both canvases white
+                stepSlider.style.setProperty('--left-canvas-bg', '#ffffff');
+                stepSlider.style.setProperty('--right-canvas-bg', '#ffffff');
+            }
+        }
     }
 
     _updateFromPointer(e, sliderEl) {
