@@ -20,6 +20,7 @@ class Scene3D {
         this.currentSliderValue = 1; // smoothed value
         this.targetSliderValue = 1; // target value from input
         this.sliderAnimating = false;
+        this.isUserSliding = false; // true while user holds the slider
         
         this.modelFiles = [
             'Assets/1.glb',
@@ -488,15 +489,35 @@ class Scene3D {
                 this.slideToNextStep();
                 // Update slider position
                 stepRange.value = this.currentStep;
-                this.updateContinuousSlider(this.currentStep);
+                this.updateContinuousSlider(this.currentStep, false);
             });
         });
         
-        // Handle manual slider input with continuous movement
-        stepRange.addEventListener('input', (e) => {
-            const sliderValue = parseFloat(e.target.value);
-            this.updateContinuousSlider(sliderValue);
-        });
+        // Custom precise dragging: prevent native jump-on-click
+        stepRange.style.touchAction = 'none';
+        const startDrag = (e) => {
+            this.isUserSliding = true;
+            e.preventDefault();
+            this._updateFromPointer(e, stepRange);
+        };
+        const moveDrag = (e) => {
+            if (!this.isUserSliding) return;
+            e.preventDefault();
+            this._updateFromPointer(e, stepRange);
+        };
+        const endDrag = (e) => {
+            if (!this.isUserSliding) return;
+            this.isUserSliding = false;
+        };
+        stepRange.addEventListener('pointerdown', startDrag);
+        document.addEventListener('pointermove', moveDrag);
+        document.addEventListener('pointerup', endDrag);
+        // Support touch events
+        stepRange.addEventListener('touchstart', startDrag, { passive: false });
+        document.addEventListener('touchmove', moveDrag, { passive: false });
+        document.addEventListener('touchend', endDrag, { passive: true });
+        
+        // Remove native input handling (we manage it ourselves)
         
         // Also handle change event for final positioning
         stepRange.addEventListener('change', (e) => {
@@ -582,8 +603,23 @@ class Scene3D {
         console.log(`Slided to step ${this.currentStep}`);
     }
     
-    updateContinuousSlider(sliderValue) {
-        // Set new target and start animating toward it for smoother control
+    updateContinuousSlider(sliderValue, immediate = false) {
+        const progressLine = document.querySelector('.progress-line');
+        const totalSteps = 4;
+        
+        // Base at 75% and offset across remaining space
+        const basePercent = 75;
+        const stepOffset = 8;
+        if (immediate) {
+            // Full user control
+            this.currentSliderValue = sliderValue;
+            const progressPercent = basePercent + ((this.currentSliderValue - 1) * stepOffset);
+            progressLine.style.left = `${progressPercent}%`;
+            this.applySliderVisuals(this.currentSliderValue);
+            return;
+        }
+        
+        // Set new target and animate gently (used for button/keyboard)
         this.targetSliderValue = sliderValue;
         if (!this.sliderAnimating) {
             this.animateSliderTowardsTarget();
@@ -614,24 +650,50 @@ class Scene3D {
         const stepOffset = 8;   // movement per step
         const progressPercent = basePercent + ((value - 1) * stepOffset);
         progressLine.style.left = `${progressPercent}%`;
+        // Expose CSS var for centering upload area between left and slider
+        document.documentElement.style.setProperty('--slider-left', `${progressPercent}vw`);
         
         const slides = document.querySelectorAll('.step-slide');
+        const activeStep = Math.min(4, Math.max(1, Math.round(value)));
         slides.forEach(slide => {
             slide.classList.remove('active', 'prev', 'next');
             const stepNum = parseInt(slide.dataset.step);
-            if (Math.abs(stepNum - value) < 0.5) {
+            if (stepNum === activeStep) {
                 slide.classList.add('active');
-            } else if (stepNum < value) {
+            } else if (stepNum < activeStep) {
                 slide.classList.add('prev');
             } else {
                 slide.classList.add('next');
             }
         });
+        // Update top-left step indicator
+        const stepNumEl = document.getElementById('step-top-left-number');
+        const stepTitleEl = document.getElementById('step-top-left-title');
+        if (stepNumEl && stepTitleEl) {
+            stepNumEl.textContent = String(activeStep);
+            const titles = {
+                1: 'Select Image',
+                2: 'Design Prompt',
+                3: 'Choose Design',
+                4: 'Get it ready'
+            };
+            stepTitleEl.textContent = titles[activeStep] || '';
+        }
+    }
+
+    _updateFromPointer(e, sliderEl) {
+        const rect = sliderEl.getBoundingClientRect();
+        const clientX = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX);
+        const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+        // Map to 1..4 with high precision
+        const value = 1 + ratio * 3;
+        sliderEl.value = value.toFixed(2);
+        this.updateContinuousSlider(value, true);
     }
     
     updateProgressLine() {
-        // Animate to the discrete step position smoothly
-        this.updateContinuousSlider(this.currentStep);
+        // Animate to the discrete step position smoothly (button/keyboard only)
+        this.updateContinuousSlider(this.currentStep, false);
     }
     
     animate() {
