@@ -13,6 +13,127 @@
 <body>
     <div id="container"></div>
     
+    <!-- Top left logo -->
+    <div class="top-logo">
+        <img src="Assets/redologo.png" alt="reDO">
+    </div>
+    
+    <!-- Step slider interface -->
+    <div id="step-slider" class="step-slider hidden">
+        <div class="progress-line"></div>
+        <div class="slider-container">
+            <!-- Step 1: Select Image -->
+            <div class="step-slide active" data-step="1">
+                <div class="step-header">
+                    <div class="step-indicator">
+                        <div class="step-circle current">
+                            <img src="Assets/slider.png" alt="Step 1">
+                        </div>
+                        <span class="step-title">Select Image</span>
+                    </div>
+                    <div class="next-step-indicator">
+                        <div class="step-circle next">
+                            <img src="Assets/slider.png" alt="Step 2">
+                        </div>
+                        <div class="arrow-button">→</div>
+                    </div>
+                </div>
+                
+                <div class="upload-area">
+                    <div class="upload-box">
+                        <div class="upload-icon">
+                            <div class="image-icon">🖼️</div>
+                            <div class="plus-icon">+</div>
+                        </div>
+                        <p class="upload-text">
+                            Upload the picture of raw material you want to turn into<br>
+                            a form, or select the image from the bottom.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bottom-images">
+                    <div class="image-thumbnail" data-image="Click1.jpeg">
+                        <img src="Assets/Click1.jpeg" alt="Option 1">
+                    </div>
+                    <div class="image-thumbnail selected" data-image="Click2.jpeg">
+                        <img src="Assets/Click2.jpeg" alt="Option 2">
+                        <div class="selection-indicator">A</div>
+                    </div>
+                    <div class="image-thumbnail" data-image="Click3.jpeg">
+                        <img src="Assets/Click3.jpeg" alt="Option 3">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 2: Design Prompt -->
+            <div class="step-slide next" data-step="2">
+                <div class="step-header">
+                    <div class="step-indicator">
+                        <div class="step-circle current">
+                            <img src="Assets/slider.png" alt="Step 2">
+                        </div>
+                        <span class="step-title">Design Prompt</span>
+                    </div>
+                    <div class="next-step-indicator">
+                        <div class="step-circle next">
+                            <img src="Assets/slider.png" alt="Step 3">
+                        </div>
+                        <div class="arrow-button">→</div>
+                    </div>
+                </div>
+                
+                <div class="step-content">
+                    <h2>Step 2: Design Prompt</h2>
+                    <p>Configure your design parameters here...</p>
+                </div>
+            </div>
+            
+            <!-- Step 3: Choose Design -->
+            <div class="step-slide next" data-step="3">
+                <div class="step-header">
+                    <div class="step-indicator">
+                        <div class="step-circle current">
+                            <img src="Assets/slider.png" alt="Step 3">
+                        </div>
+                        <span class="step-title">Choose Design</span>
+                    </div>
+                    <div class="next-step-indicator">
+                        <div class="step-circle next">
+                            <img src="Assets/slider.png" alt="Step 4">
+                        </div>
+                        <div class="arrow-button">→</div>
+                    </div>
+                </div>
+                
+                <div class="step-content">
+                    <h2>Step 3: Choose Design</h2>
+                    <p>Select your preferred design option...</p>
+                </div>
+            </div>
+            
+            <!-- Step 4: Get it ready -->
+            <div class="step-slide next" data-step="4">
+                <div class="step-header">
+                    <div class="step-indicator">
+                        <div class="step-circle current">
+                            <img src="Assets/slider.png" alt="Step 4">
+                        </div>
+                        <span class="step-title">Get it ready</span>
+                    </div>
+                    <div class="next-step-indicator">
+                        <!-- No next step for the last slide -->
+                    </div>
+                </div>
+                
+                <div class="step-content">
+                    <h2>Step 4: Get it ready</h2>
+                    <p>Finalize and prepare your design...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Navigation steps -->
     <div class="nav-steps">
         <div class="nav-step active">

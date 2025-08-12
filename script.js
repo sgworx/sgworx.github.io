@@ -403,9 +403,142 @@ class Scene3D {
                 // Add active class to clicked step
                 step.classList.add('active');
                 
+                // Show step slider for step 1
+                if (index === 0) {
+                    this.showStepSlider();
+                } else {
+                    this.hideStepSlider();
+                }
+                
                 console.log(`Navigation step ${index + 1} clicked`);
             });
         });
+        
+        // Setup step slider functionality
+        this.setupStepSlider();
+    }
+    
+    showStepSlider() {
+        const slider = document.getElementById('step-slider');
+        const logo = document.querySelector('.top-logo');
+        slider.classList.remove('hidden');
+        logo.classList.add('visible');
+        
+        // Reset to step 1 and update progress line
+        this.currentStep = 1;
+        this.updateProgressLine();
+    }
+    
+    hideStepSlider() {
+        const slider = document.getElementById('step-slider');
+        const logo = document.querySelector('.top-logo');
+        slider.classList.add('hidden');
+        logo.classList.remove('visible');
+    }
+    
+    setupStepSlider() {
+        const thumbnails = document.querySelectorAll('.image-thumbnail');
+        const arrowButtons = document.querySelectorAll('.arrow-button');
+        const uploadBox = document.querySelector('.upload-box');
+        this.currentStep = 1;
+        
+        // Handle thumbnail selection
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                // Remove selected class from all thumbnails
+                thumbnails.forEach(thumb => {
+                    thumb.classList.remove('selected');
+                    const indicator = thumb.querySelector('.selection-indicator');
+                    if (indicator) indicator.remove();
+                });
+                
+                // Add selected class to clicked thumbnail
+                thumbnail.classList.add('selected');
+                const indicator = document.createElement('div');
+                indicator.className = 'selection-indicator';
+                indicator.textContent = 'A';
+                thumbnail.appendChild(indicator);
+                
+                const imageName = thumbnail.dataset.image;
+                console.log(`Selected image: ${imageName}`);
+            });
+        });
+        
+        // Handle upload box click
+        if (uploadBox) {
+            uploadBox.addEventListener('click', () => {
+                console.log('Upload box clicked - would open file picker');
+            });
+        }
+        
+        // Handle arrow button clicks for navigation
+        arrowButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                this.slideToNextStep();
+            });
+        });
+        
+        // Close slider with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.hideStepSlider();
+            }
+        });
+    }
+    
+    slideToNextStep() {
+        const slides = document.querySelectorAll('.step-slide');
+        const totalSteps = slides.length;
+        
+        if (this.currentStep < totalSteps) {
+            // Move current slide to previous
+            const currentSlide = document.querySelector(`.step-slide[data-step="${this.currentStep}"]`);
+            currentSlide.classList.remove('active');
+            currentSlide.classList.add('prev');
+            
+            // Move next slide to active
+            this.currentStep++;
+            const nextSlide = document.querySelector(`.step-slide[data-step="${this.currentStep}"]`);
+            nextSlide.classList.remove('next');
+            nextSlide.classList.add('active');
+            
+            // Update progress line position
+            this.updateProgressLine();
+            
+            console.log(`Slided to step ${this.currentStep}`);
+        }
+    }
+    
+    slideToPrevStep() {
+        const slides = document.querySelectorAll('.step-slide');
+        
+        if (this.currentStep > 1) {
+            // Move current slide to next
+            const currentSlide = document.querySelector(`.step-slide[data-step="${this.currentStep}"]`);
+            currentSlide.classList.remove('active');
+            currentSlide.classList.add('next');
+            
+            // Move previous slide to active
+            this.currentStep--;
+            const prevSlide = document.querySelector(`.step-slide[data-step="${this.currentStep}"]`);
+            prevSlide.classList.remove('prev');
+            prevSlide.classList.add('active');
+            
+            // Update progress line position
+            this.updateProgressLine();
+            
+            console.log(`Slided back to step ${this.currentStep}`);
+        }
+    }
+    
+    updateProgressLine() {
+        const progressLine = document.querySelector('.progress-line');
+        const totalSteps = 4; // We have 4 steps
+        
+        // Calculate position as percentage of screen width
+        // Step 1: 0%, Step 2: 33.33%, Step 3: 66.66%, Step 4: 100%
+        const progressPercent = ((this.currentStep - 1) / (totalSteps - 1)) * 100;
+        progressLine.style.left = `${progressPercent}%`;
     }
     
     animate() {

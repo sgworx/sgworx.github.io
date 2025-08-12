@@ -157,3 +157,332 @@ body:active {
         font-size: 12px;
     }
 }
+
+/* Top logo - only visible when slider is open */
+.top-logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 3000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.top-logo.visible {
+    opacity: 1;
+}
+
+.top-logo img {
+    height: 40px;
+    width: auto;
+}
+
+@media (max-width: 768px) {
+    .top-logo {
+        top: 15px;
+        left: 15px;
+    }
+    
+    .top-logo img {
+        height: 30px;
+    }
+}
+
+/* Step slider interface */
+.step-slider {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 2000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Progress line that slides left to right */
+.progress-line {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 3px;
+    height: 100vh;
+    background: #2196F3;
+    transform: translateY(-50%);
+    transition: left 0.5s ease-in-out;
+    z-index: 1;
+}
+
+.step-slider.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.slider-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.step-slide {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    transition: transform 0.5s ease-in-out;
+    padding: 40px;
+    box-sizing: border-box;
+    transform: translateX(0);
+}
+
+.step-slide.active {
+    left: 0;
+    transform: translateX(0);
+}
+
+.step-slide.prev {
+    left: 0;
+    transform: translateX(-100%);
+}
+
+.step-slide.next {
+    left: 0;
+    transform: translateX(100%);
+}
+
+/* Step header with navigation */
+.step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+.step-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.step-circle.current {
+    background: #ffffff;
+    border: 2px solid #333;
+}
+
+.step-circle.current img {
+    filter: brightness(0) invert(1); /* Make image white for current step */
+}
+
+.step-circle.next {
+    background: #000000;
+    border: 2px solid #000000;
+}
+
+.step-circle.next img {
+    filter: brightness(0); /* Make image black for next step */
+}
+
+.step-title {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.next-step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.arrow-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.arrow-button:hover {
+    background: #f0f0f0;
+}
+
+/* Upload area */
+.upload-area {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 60px;
+}
+
+.upload-box {
+    width: 500px;
+    height: 300px;
+    border: 3px dashed #2196F3;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-box:hover {
+    background: #f0f4ff;
+    border-color: #1976D2;
+}
+
+.upload-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.image-icon {
+    background: #2196F3;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plus-icon {
+    background: #4CAF50;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.upload-text {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Bottom image thumbnails */
+.bottom-images {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.image-thumbnail {
+    position: relative;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.image-thumbnail:hover {
+    transform: scale(1.05);
+}
+
+.image-thumbnail img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+}
+
+.selection-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background: #2196F3;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Step content for other steps */
+.step-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.step-content h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.step-content p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .step-slide {
+        padding: 20px;
+    }
+    
+    .upload-box {
+        width: 90%;
+        height: 250px;
+    }
+    
+    .bottom-images {
+        gap: 10px;
+    }
+    
+    .image-thumbnail img {
+        width: 100px;
+        height: 70px;
+    }
+    
+    .step-header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+}
