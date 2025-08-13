@@ -243,7 +243,7 @@ body:active {
     font-weight: 600;
     font-size: 18px;
     z-index: 15;
-    margin-left: 10px; /* Add some space after the slider */
+    margin-left: 24px; /* Increase space after the slider */
 }
 
 .next-step-badge.hidden { display: none; }
@@ -265,7 +265,8 @@ body:active {
     position: absolute;
     width: 60px;
     height: 60px;
-    background: #000000;
+    background: #ffffff; /* white background */
+    border: 2px solid #000; /* black border */
     border-radius: 50%;
     top: 50%;
     left: -30px; /* Center on the line */
@@ -288,7 +289,7 @@ body:active {
     transform: translate(-50%, -50%);
     width: 20px;
     height: 8px;
-    background: #fff;
+    background: #000; /* black arrow */
     border-radius: 4px;
     clip-path: polygon(0 0, 75% 0, 100% 50%, 75% 100%, 0 100%, 25% 50%);
     pointer-events: none;
@@ -766,3 +767,7 @@ body:active {
         font-size: 14px;
     }
 }
+
+/* Force black color for top-left step number and title */
+#step-top-left-number { color: #000 !important; }
+#step-top-left-title { color: #000 !important; }
