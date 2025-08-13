@@ -203,61 +203,61 @@ body:active {
 
 /* Canvas areas with different backgrounds */
 .step-slider::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 75%;
-    height: 100%;
-    background: var(--left-canvas-bg, #ffffff); /* Step 1 canvas - white by default */
-    z-index: -1;
-    transition: background 0.6s ease-out;
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: var(--slider-left, 75vw);
+	height: 100%;
+	background: var(--left-canvas-bg, #ffffff); /* Step 1 canvas - white by default */
+	z-index: -1;
+	transition: background 0.6s ease-out;
 }
 
 .step-slider::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 25%;
-    height: 100%;
-    background: var(--right-canvas-bg, #000000); /* Step 2 canvas - black by default */
-    z-index: -1;
-    transition: background 0.6s ease-out;
+	content: '';
+	position: absolute;
+	top: 0;
+	left: var(--slider-left, 75vw);
+	width: calc(100% - var(--slider-left, 75vw));
+	height: 100%;
+	background: var(--right-canvas-bg, #000000); /* Step 2 canvas - black by default */
+	z-index: -1;
+	transition: background 0.6s ease-out;
 }
 
 /* Next step badge (white circle outline with white number) */
 .next-step-badge {
-    position: absolute;
-    left: 75%; /* Position it on the left side of the 2nd canvas */
-    top: 114px; /* Same level as the "1" circle (70px + 16px + 10px + 18px) */
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: transparent;
-    border: 2px solid #fff;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 18px;
-    z-index: 15;
-    margin-left: 24px; /* Increase space after the slider */
+	position: absolute;
+	left: var(--slider-left, 75vw); /* Position it on the left side of the 2nd canvas */
+	top: 114px; /* Same level as the "1" circle (70px + 16px + 10px + 18px) */
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background: transparent;
+	border: 2px solid #fff;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 600;
+	font-size: 18px;
+	z-index: 15;
+	margin-left: 24px; /* space after the slider */
 }
 
 .next-step-badge.hidden { display: none; }
 
 /* Progress line that slides left to right */
 .progress-line {
-    position: absolute;
-    left: 75%;
-    top: 0;
-    width: 4px;
-    height: 100vh;
-    background: #F3E831;
-    transition: left 0.6s ease-out;
-    z-index: 10;
+	position: absolute;
+	left: var(--slider-left, 75vw);
+	top: 0;
+	width: 4px;
+	height: 100vh;
+	background: #F3E831;
+	transition: left 0.6s ease-out;
+	z-index: 10;
 }
 
 /* Progress circle that moves along the line */
@@ -285,13 +285,26 @@ body:active {
     content: '';
     position: absolute;
     top: 50%;
-    left: 35%;
+    left: 45%;
     transform: translate(-50%, -50%);
-    width: 20px;
-    height: 8px;
-    background: #000; /* black arrow */
-    border-radius: 4px;
-    clip-path: polygon(0 0, 75% 0, 100% 50%, 75% 100%, 0 100%, 25% 50%);
+    width: 28px; /* arrow shaft length */
+    height: 4px;  /* arrow shaft thickness */
+    background: #000; /* black shaft */
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.progress-circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 62%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid #000; /* black head */
     pointer-events: none;
 }
 
@@ -577,7 +590,7 @@ body:active {
 .upload-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* fit to square without cropping */
     display: none;
 }
 

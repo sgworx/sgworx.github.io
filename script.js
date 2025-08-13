@@ -473,19 +473,39 @@ class Scene3D {
                 
                 // Get the image source from the clicked thumbnail
                 const thumbnailImg = thumbnail.querySelector('img');
-                const imageSrc = thumbnailImg.src;
+                const imageSrc = thumbnailImg && thumbnailImg.src;
                 const imageName = thumbnail.dataset.image;
                 
                 // Update the upload box to show the selected image
                 const uploadBox = document.querySelector('.upload-box');
-                const uploadBoxImg = uploadBox.querySelector('img');
-                
-                uploadBoxImg.src = imageSrc;
-                uploadBox.classList.add('has-image');
+                const uploadBoxImg = uploadBox ? uploadBox.querySelector('img') : null;
+                if (uploadBox && uploadBoxImg && imageSrc) {
+                    uploadBoxImg.src = imageSrc;
+                    uploadBox.classList.add('has-image');
+                    uploadBoxImg.style.display = 'block'; // force visible in case of stale styles
+                }
                 
                 console.log(`Selected image: ${imageName}`);
             });
         });
+        
+        // Fallback delegated handler (in case thumbnails are re-rendered)
+        const bottomImages = document.querySelector('.bottom-images');
+        if (bottomImages) {
+            bottomImages.addEventListener('click', (e) => {
+                const item = e.target && e.target.closest('.image-thumbnail');
+                if (!item) return;
+                const img = item.querySelector('img');
+                if (!img) return;
+                const uploadBox = document.querySelector('.upload-box');
+                const uploadBoxImg = uploadBox ? uploadBox.querySelector('img') : null;
+                if (uploadBox && uploadBoxImg) {
+                    uploadBoxImg.src = img.src;
+                    uploadBox.classList.add('has-image');
+                    uploadBoxImg.style.display = 'block';
+                }
+            });
+        }
         
         // Handle upload box click
         if (uploadBox) {
@@ -506,19 +526,25 @@ class Scene3D {
         
         // Custom precise dragging: prevent native jump-on-click
         stepRange.style.touchAction = 'none';
+        this.dragStartX = 0;
+        
         const startDrag = (e) => {
             this.isUserSliding = true;
             e.preventDefault();
-            this._updateFromPointer(e, stepRange);
+            this.dragStartX = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX);
+            // Do not update on simple click; wait for move
         };
         const moveDrag = (e) => {
             if (!this.isUserSliding) return;
             e.preventDefault();
-            this._updateFromPointer(e, stepRange);
+            this._updateFromPointer(e, stepRange, false); // update visuals without snapping slides
         };
         const endDrag = (e) => {
             if (!this.isUserSliding) return;
             this.isUserSliding = false;
+            // Snap to nearest step on release
+            const finalStep = Math.round(this.currentSliderValue || 1);
+            this.slideToStep(finalStep);
         };
         stepRange.addEventListener('pointerdown', startDrag);
         document.addEventListener('pointermove', moveDrag);
@@ -530,7 +556,7 @@ class Scene3D {
         
         // Remove native input handling (we manage it ourselves)
         
-        // Also handle change event for final positioning
+        // Also handle change event for final positioning (fallback)
         stepRange.addEventListener('change', (e) => {
             const newStep = Math.round(parseFloat(e.target.value));
             this.slideToStep(newStep);
@@ -614,7 +640,7 @@ class Scene3D {
         console.log(`Slided to step ${this.currentStep}`);
     }
     
-    updateContinuousSlider(sliderValue, immediate = false) {
+    updateContinuousSlider(sliderValue, immediate = false, updateSlides = true) {
         const progressLine = document.querySelector('.progress-line');
         const totalSteps = 4;
         
@@ -622,11 +648,11 @@ class Scene3D {
         const basePercent = 75;
         const stepOffset = 8;
         if (immediate) {
-            // Full user control
+            // Full user control while dragging
             this.currentSliderValue = sliderValue;
             const progressPercent = basePercent + ((this.currentSliderValue - 1) * stepOffset);
-            progressLine.style.left = `${progressPercent}%`;
-            this.applySliderVisuals(this.currentSliderValue);
+            if (progressLine) progressLine.style.left = `${progressPercent}%`;
+            this.applySliderVisuals(this.currentSliderValue, updateSlides);
             return;
         }
         
@@ -643,40 +669,42 @@ class Scene3D {
             const delta = this.targetSliderValue - this.currentSliderValue;
             if (Math.abs(delta) < 0.001) {
                 this.currentSliderValue = this.targetSliderValue;
-                this.applySliderVisuals(this.currentSliderValue);
+                this.applySliderVisuals(this.currentSliderValue, true);
                 this.sliderAnimating = false;
                 return;
             }
             // Damping factor controls "speed" (lower = slower, more control)
             this.currentSliderValue += delta * 0.12;
-            this.applySliderVisuals(this.currentSliderValue);
+            this.applySliderVisuals(this.currentSliderValue, true);
             requestAnimationFrame(step);
         };
         requestAnimationFrame(step);
     }
     
-    applySliderVisuals(value) {
+    applySliderVisuals(value, updateSlides = true) {
         const progressLine = document.querySelector('.progress-line');
         const basePercent = 75; // 3rd division end
         const stepOffset = 8;   // movement per step
         const progressPercent = basePercent + ((value - 1) * stepOffset);
-        progressLine.style.left = `${progressPercent}%`;
-        // Expose CSS var for centering upload area between left and slider
+        if (progressLine) progressLine.style.left = `${progressPercent}%`;
+        // Also set CSS var in viewport units so canvases and badges track the dragger
         document.documentElement.style.setProperty('--slider-left', `${progressPercent}vw`);
         
         const slides = document.querySelectorAll('.step-slide');
         const activeStep = Math.min(4, Math.max(1, Math.round(value)));
-        slides.forEach(slide => {
-            slide.classList.remove('active', 'prev', 'next');
-            const stepNum = parseInt(slide.dataset.step);
-            if (stepNum === activeStep) {
-                slide.classList.add('active');
-            } else if (stepNum < activeStep) {
-                slide.classList.add('prev');
-            } else {
-                slide.classList.add('next');
-            }
-        });
+        if (updateSlides) {
+            slides.forEach(slide => {
+                slide.classList.remove('active', 'prev', 'next');
+                const stepNum = parseInt(slide.dataset.step);
+                if (stepNum === activeStep) {
+                    slide.classList.add('active');
+                } else if (stepNum < activeStep) {
+                    slide.classList.add('prev');
+                } else {
+                    slide.classList.add('next');
+                }
+            });
+        }
         // Update top-left step indicator
         const stepNumEl = document.getElementById('step-top-left-number');
         const stepTitleEl = document.getElementById('step-top-left-title');
@@ -721,14 +749,14 @@ class Scene3D {
         }
     }
 
-    _updateFromPointer(e, sliderEl) {
+    _updateFromPointer(e, sliderEl, updateSlides = false) {
         const rect = sliderEl.getBoundingClientRect();
         const clientX = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX);
         const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
         // Map to 1..4 with high precision
         const value = 1 + ratio * 3;
         sliderEl.value = value.toFixed(2);
-        this.updateContinuousSlider(value, true);
+        this.updateContinuousSlider(value, true, updateSlides);
     }
     
     updateProgressLine() {
