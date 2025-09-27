@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Graph - 3D Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="container">
+        <canvas id="canvas"></canvas>
+        <div id="ui">
+            <div id="title">
+                <h1>Career Graph</h1>
+                <p>3D Visualization of Professional Journey</p>
+            </div>
+            <div id="controls">
+                <div class="control-group">
+                    <label>Camera Speed:</label>
+                    <input type="range" id="cameraSpeed" min="0.1" max="2" step="0.1" value="1">
+                </div>
+                <div class="control-group">
+                    <button id="resetCamera">Reset View</button>
+                    <button id="toggleAutoRotate">Auto Rotate</button>
+                </div>
+            </div>
+            <div id="info">
+                <div class="axis-info">
+                    <div class="axis-item" data-axis="tech">
+                        <div class="axis-color tech"></div>
+                        <span>Tech/Product</span>
+                    </div>
+                    <div class="axis-item" data-axis="design">
+                        <div class="axis-color design"></div>
+                        <span>Design</span>
+                    </div>
+                    <div class="axis-item" data-axis="ai">
+                        <div class="axis-color ai"></div>
+                        <span>AI</span>
+                    </div>
+                    <div class="axis-item" data-axis="fabrication">
+                        <div class="axis-color fabrication"></div>
+                        <span>Fabrication</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Loading 3D Model...</p>
+        </div>
+    </div>
+
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
