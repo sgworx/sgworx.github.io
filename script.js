@@ -54,6 +54,14 @@ class CareerGraph3D {
     }
 
     setupControls() {
+        // Check if OrbitControls is available
+        if (typeof THREE.OrbitControls === 'undefined') {
+            console.error('OrbitControls not loaded. Using basic camera controls.');
+            // Create a simple fallback - just basic camera without controls
+            this.controls = null;
+            return;
+        }
+        
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
         
         // Rhino-style navigation settings
@@ -313,7 +321,10 @@ class CareerGraph3D {
     animate() {
         requestAnimationFrame(() => this.animate());
         
-        this.controls.update();
+        // Only update controls if they exist
+        if (this.controls) {
+            this.controls.update();
+        }
         
         // Gentle rotation of the person model
         if (this.personModel) {
