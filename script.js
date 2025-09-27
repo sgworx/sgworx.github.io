@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             1000
         );
-        // True bird's eye view - looking straight down
-        this.camera.position.set(0, 15, 0);
+        // Top-down view like Rhino plan view
+        this.camera.position.set(0, 10, 0);
         this.camera.lookAt(0, 0, 0);
     }
 
@@ -75,16 +75,16 @@ class CareerGraph3D {
         
         // Zoom settings (like Rhino)
         this.controls.zoomSpeed = 1.2;
-        this.controls.minDistance = 5;
-        this.controls.maxDistance = 30;
+        this.controls.minDistance = 2;
+        this.controls.maxDistance = 50;
         
         // Rotation settings (like Rhino)
         this.controls.rotateSpeed = 1.0;
         this.controls.panSpeed = 1.0;
         
-        // Restrict to top-down view only - like Rhino's top view
-        this.controls.maxPolarAngle = Math.PI / 2; // 90 degrees - horizontal
-        this.controls.minPolarAngle = Math.PI / 2; // 90 degrees - horizontal
+        // Allow full rotation (not limited like before)
+        this.controls.maxPolarAngle = Math.PI;
+        this.controls.minPolarAngle = 0;
         
         // No auto-rotate
         this.controls.autoRotate = false;
@@ -105,47 +105,45 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 6;
-        const axisThickness = 0.15;
-        const labelDistance = 8;
+        const axisLength = 4;
+        const axisThickness = 0.02;
+        const labelDistance = 5.5;
 
-        // Create the four career axes in a proper cross pattern for top view
+        // Create flat axes on the ground (Y=0) like Rhino plan view
         const axesConfigs = [
-            { direction: new THREE.Vector3(-1, 0, 0), color: 0x000000, label: 'Design' },        // left
-            { direction: new THREE.Vector3(1, 0, 0), color: 0x000000, label: 'Fabrication' },   // right
-            { direction: new THREE.Vector3(0, 0, -1), color: 0x000000, label: 'Tech' },          // front
-            { direction: new THREE.Vector3(0, 0, 1), color: 0x000000, label: 'AI' }               // back
+            { direction: new THREE.Vector3(1, 0, 0), color: 0x000000, label: 'Tech' },        // +X
+            { direction: new THREE.Vector3(0, 0, 1), color: 0x000000, label: 'Design' },      // +Z
+            { direction: new THREE.Vector3(-1, 0, 0), color: 0x000000, label: 'Fabrication' }, // -X
+            { direction: new THREE.Vector3(0, 0, -1), color: 0x000000, label: 'AI' }           // -Z
         ];
 
         axesConfigs.forEach((config, index) => {
-            // Create axis line - horizontal bars for top view
+            // Create flat axis line on the ground
             const geometry = new THREE.BoxGeometry(axisLength, axisThickness, axisThickness);
             const material = new THREE.MeshLambertMaterial({ color: config.color });
             const axis = new THREE.Mesh(geometry, material);
             
-            // Position the axis at the origin
+            // Position the axis flat on the ground (Y=0)
             axis.position.set(0, 0, 0);
             
-            // Calculate rotation to align with direction
-            const direction = config.direction.clone();
-            direction.y = 0; // Keep axes horizontal
-            direction.normalize();
-            
-            // Position the axis
-            axis.position.copy(direction.clone().multiplyScalar(axisLength / 2));
+            // Position the axis along its direction
+            axis.position.copy(config.direction.clone().multiplyScalar(axisLength / 2));
             
             // Rotate to align with direction
-            const angle = Math.atan2(direction.x, direction.z);
+            const angle = Math.atan2(config.direction.x, config.direction.z);
             axis.rotation.y = angle;
             
             this.scene.add(axis);
             this.axes.push(axis);
 
             // Create label
-            this.createLabel(config.label, direction.clone().multiplyScalar(labelDistance), config.color);
+            this.createLabel(config.label, config.direction.clone().multiplyScalar(labelDistance), config.color);
         });
     }
 
+    createCrossingLines() {
+        // Remove crossing lines for clean plan view
+    }
 
     createLabel(text, position, color) {
         // Create canvas for text
@@ -158,7 +156,7 @@ class CareerGraph3D {
         context.fillRect(0, 0, canvas.width, canvas.height);
         
         context.fillStyle = '#000000';
-        context.font = 'bold 32px Helvetica Neue, Helvetica, Arial, sans-serif';
+        context.font = 'bold 24px Helvetica Neue, Helvetica, Arial, sans-serif';
         context.textAlign = 'center';
         context.textBaseline = 'middle';
         context.fillText(text, canvas.width / 2, canvas.height / 2);
@@ -169,7 +167,7 @@ class CareerGraph3D {
         const sprite = new THREE.Sprite(material);
         
         sprite.position.copy(position);
-        sprite.scale.set(3, 0.8, 1);
+        sprite.scale.set(2, 0.5, 1);
         
         this.scene.add(sprite);
         this.labels.push(sprite);
@@ -237,31 +235,31 @@ class CareerGraph3D {
         // Create a simple person representation if model fails to load - black and white only
         const group = new THREE.Group();
         
-        // Body - black, larger scale
-        const bodyGeometry = new THREE.CylinderGeometry(0.4, 0.5, 2, 8);
+        // Body - black
+        const bodyGeometry = new THREE.CylinderGeometry(0.3, 0.4, 1.5, 8);
         const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        body.position.y = 1;
+        body.position.y = 0.75;
         group.add(body);
         
-        // Head - black, larger scale
-        const headGeometry = new THREE.SphereGeometry(0.35, 16, 16);
+        // Head - black
+        const headGeometry = new THREE.SphereGeometry(0.25, 16, 16);
         const headMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const head = new THREE.Mesh(headGeometry, headMaterial);
-        head.position.y = 2;
+        head.position.y = 1.5;
         group.add(head);
         
-        // Arms - black, larger scale
-        const armGeometry = new THREE.CylinderGeometry(0.15, 0.15, 1.2, 8);
+        // Arms - black
+        const armGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 8);
         const armMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         
         const leftArm = new THREE.Mesh(armGeometry, armMaterial);
-        leftArm.position.set(-0.6, 1.5, 0);
+        leftArm.position.set(-0.4, 1, 0);
         leftArm.rotation.z = Math.PI / 4;
         group.add(leftArm);
         
         const rightArm = new THREE.Mesh(armGeometry, armMaterial);
-        rightArm.position.set(0.6, 1.5, 0);
+        rightArm.position.set(0.4, 1, 0);
         rightArm.rotation.z = -Math.PI / 4;
         group.add(rightArm);
         
@@ -294,6 +292,8 @@ class CareerGraph3D {
         if (this.personModel) {
             this.personModel.rotation.y += 0.005;
         }
+        
+        // No animation for clean plan view
         
         this.renderer.render(this.scene, this.camera);
     }
