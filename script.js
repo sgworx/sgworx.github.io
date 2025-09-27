@@ -61,30 +61,30 @@ class CareerGraph3D {
     setupControls() {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         
-        // Rhino-style navigation settings
+        // Restrict to top-down view only
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
         
         // Mouse controls (like Rhino):
-        // Left mouse: Rotate around target
+        // Left mouse: Rotate around target (horizontal only)
         // Right mouse: Pan (translate)
         // Middle mouse wheel: Zoom
         this.controls.enableZoom = true;
         this.controls.enablePan = true;
         this.controls.enableRotate = true;
         
-        // Zoom settings (like Rhino)
+        // Zoom settings
         this.controls.zoomSpeed = 1.2;
-        this.controls.minDistance = 2;
-        this.controls.maxDistance = 50;
+        this.controls.minDistance = 5;
+        this.controls.maxDistance = 30;
         
-        // Rotation settings (like Rhino)
+        // Rotation settings - horizontal rotation only
         this.controls.rotateSpeed = 1.0;
         this.controls.panSpeed = 1.0;
         
-        // Allow full rotation (not limited like before)
-        this.controls.maxPolarAngle = Math.PI;
-        this.controls.minPolarAngle = 0;
+        // Restrict to top-down view only - no looking up or down
+        this.controls.maxPolarAngle = Math.PI / 2; // 90 degrees - horizontal
+        this.controls.minPolarAngle = Math.PI / 2; // 90 degrees - horizontal
         
         // No auto-rotate
         this.controls.autoRotate = false;
@@ -148,31 +148,27 @@ class CareerGraph3D {
 
 
     createLabel(text, position, color) {
-        // Create canvas for text
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.width = 256;
-        canvas.height = 64;
+        // Create HTML element for flat text on canvas
+        const labelElement = document.createElement('div');
+        labelElement.textContent = text;
+        labelElement.style.position = 'absolute';
+        labelElement.style.color = '#000000';
+        labelElement.style.fontFamily = 'Helvetica Neue, Helvetica, Arial, sans-serif';
+        labelElement.style.fontSize = '24px';
+        labelElement.style.fontWeight = 'bold';
+        labelElement.style.pointerEvents = 'none';
+        labelElement.style.userSelect = 'none';
+        labelElement.style.zIndex = '10';
         
-        context.fillStyle = 'rgba(255, 255, 255, 0)';
-        context.fillRect(0, 0, canvas.width, canvas.height);
+        // Add to UI container
+        const uiContainer = document.getElementById('ui');
+        uiContainer.appendChild(labelElement);
         
-        context.fillStyle = '#000000';
-        context.font = 'bold 32px Helvetica Neue, Helvetica, Arial, sans-serif';
-        context.textAlign = 'center';
-        context.textBaseline = 'middle';
-        context.fillText(text, canvas.width / 2, canvas.height / 2);
-
-        // Create texture and material
-        const texture = new THREE.CanvasTexture(canvas);
-        const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
-        const sprite = new THREE.Sprite(material);
-        
-        sprite.position.copy(position);
-        sprite.scale.set(3, 0.8, 1);
-        
-        this.scene.add(sprite);
-        this.labels.push(sprite);
+        // Store reference for positioning
+        this.labels.push({
+            element: labelElement,
+            position: position.clone()
+        });
     }
 
     loadPersonModel() {
@@ -282,6 +278,26 @@ class CareerGraph3D {
         });
     }
 
+    updateLabelPositions() {
+        // Update HTML label positions based on 3D world coordinates
+        this.labels.forEach(label => {
+            if (label.element && label.position) {
+                // Convert 3D world position to screen coordinates
+                const vector = label.position.clone();
+                vector.project(this.camera);
+                
+                // Convert to screen coordinates
+                const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (vector.y * -0.5 + 0.5) * window.innerHeight;
+                
+                // Update label position
+                label.element.style.left = x + 'px';
+                label.element.style.top = y + 'px';
+                label.element.style.transform = 'translate(-50%, -50%)';
+            }
+        });
+    }
+
     animate() {
         requestAnimationFrame(() => this.animate());
         
@@ -294,6 +310,9 @@ class CareerGraph3D {
         if (this.personModel) {
             this.personModel.rotation.y += 0.005;
         }
+        
+        // Update label positions
+        this.updateLabelPositions();
         
         this.renderer.render(this.scene, this.camera);
     }
