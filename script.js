@@ -1,3 +1,7 @@
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
 class CareerGraph3D {
     constructor() {
         this.scene = null;
@@ -54,15 +58,7 @@ class CareerGraph3D {
     }
 
     setupControls() {
-        // Check if OrbitControls is available
-        if (typeof THREE.OrbitControls === 'undefined') {
-            console.error('OrbitControls not loaded. Using basic camera controls.');
-            // Create a simple fallback - just basic camera without controls
-            this.controls = null;
-            return;
-        }
-        
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         
         // Rhino-style navigation settings
         this.controls.enableDamping = true;
@@ -212,7 +208,7 @@ class CareerGraph3D {
     }
 
     loadPersonModel() {
-        const loader = new THREE.GLTFLoader();
+        const loader = new GLTFLoader();
         // Try multiple possible paths for the model
         const possiblePaths = [
             'C:/Dev/whoisshraddha/assets/shraddhaghuge.glb',
@@ -343,12 +339,5 @@ class CareerGraph3D {
 
 // Initialize the application when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if Three.js is available
-    if (typeof THREE === 'undefined') {
-        console.error('Three.js is not loaded. Please check the CDN links.');
-        document.body.innerHTML = '<div style="text-align: center; padding: 50px; font-family: Helvetica Neue; color: #333;"><h2>Loading Error</h2><p>Three.js library failed to load. Please refresh the page.</p></div>';
-        return;
-    }
-    
     new CareerGraph3D();
 });
