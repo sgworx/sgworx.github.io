@@ -339,5 +339,10 @@ class CareerGraph3D {
 
 // Initialize the application when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    new CareerGraph3D();
+    try {
+        new CareerGraph3D();
+    } catch (error) {
+        console.error('Failed to initialize CareerGraph3D:', error);
+        document.body.innerHTML = '<div style="text-align: center; padding: 50px; font-family: Helvetica Neue; color: #333;"><h2>Loading Error</h2><p>Failed to load 3D visualization. Please refresh the page.</p></div>';
+    }
 });
