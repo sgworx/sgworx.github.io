@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             1000
         );
-        // Top-down view like Rhino plan view
-        this.camera.position.set(0, 10, 0);
+        // Top-down view like Rhino plan view - higher up to see larger cross
+        this.camera.position.set(0, 15, 0);
         this.camera.lookAt(0, 0, 0);
     }
 
@@ -105,9 +105,9 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 4;
-        const axisThickness = 0.02;
-        const labelDistance = 5.5;
+        const axisLength = 8;
+        const axisThickness = 0.1;
+        const labelDistance = 10;
 
         // Create flat axes on the ground (Y=0) like Rhino plan view
         const axesConfigs = [
@@ -200,7 +200,7 @@ class CareerGraph3D {
                 modelPath,
                 (gltf) => {
                     this.personModel = gltf.scene;
-                    this.personModel.scale.set(0.5, 0.5, 0.5);
+                    this.personModel.scale.set(0.2, 0.2, 0.2);
                     this.personModel.position.set(0, 0, 0);
                     
                     // Enable shadows
@@ -235,31 +235,31 @@ class CareerGraph3D {
         // Create a simple person representation if model fails to load - black and white only
         const group = new THREE.Group();
         
-        // Body - black
-        const bodyGeometry = new THREE.CylinderGeometry(0.3, 0.4, 1.5, 8);
+        // Body - black (smaller scale)
+        const bodyGeometry = new THREE.CylinderGeometry(0.1, 0.15, 0.5, 8);
         const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        body.position.y = 0.75;
+        body.position.y = 0.25;
         group.add(body);
         
-        // Head - black
-        const headGeometry = new THREE.SphereGeometry(0.25, 16, 16);
+        // Head - black (smaller scale)
+        const headGeometry = new THREE.SphereGeometry(0.08, 16, 16);
         const headMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const head = new THREE.Mesh(headGeometry, headMaterial);
-        head.position.y = 1.5;
+        head.position.y = 0.5;
         group.add(head);
         
-        // Arms - black
-        const armGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 8);
+        // Arms - black (smaller scale)
+        const armGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.3, 8);
         const armMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         
         const leftArm = new THREE.Mesh(armGeometry, armMaterial);
-        leftArm.position.set(-0.4, 1, 0);
+        leftArm.position.set(-0.15, 0.3, 0);
         leftArm.rotation.z = Math.PI / 4;
         group.add(leftArm);
         
         const rightArm = new THREE.Mesh(armGeometry, armMaterial);
-        rightArm.position.set(0.4, 1, 0);
+        rightArm.position.set(0.15, 0.3, 0);
         rightArm.rotation.z = -Math.PI / 4;
         group.add(rightArm);
         
