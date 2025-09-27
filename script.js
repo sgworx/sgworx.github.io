@@ -38,7 +38,7 @@ class CareerGraph3D {
             0.1,
             1000
         );
-        this.camera.position.set(8, 6, 8);
+        this.camera.position.set(6, 4, 6);
         this.camera.lookAt(0, 0, 0);
     }
 
@@ -95,38 +95,53 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 6;
-        const axisThickness = 0.1;
-        const labelDistance = 7;
+        const axisLength = 4;
+        const axisThickness = 0.05;
+        const labelDistance = 5;
 
-        // Define axes with their properties
-        const axisConfigs = [
-            { direction: new THREE.Vector3(1, 0, 0), color: 0xff6b6b, label: 'Tech/Product', position: 'right' },
-            { direction: new THREE.Vector3(0, 0, 1), color: 0x4ecdc4, label: 'Design', position: 'top' },
-            { direction: new THREE.Vector3(-1, 0, 0), color: 0x45b7d1, label: 'AI', position: 'left' },
-            { direction: new THREE.Vector3(0, 0, -1), color: 0x96ceb4, label: 'Fabrication', position: 'bottom' }
+        // Create X, Y, Z axes at the origin
+        const axesConfigs = [
+            { direction: new THREE.Vector3(1, 0, 0), color: 0xff6b6b, label: 'Tech/Product' }, // +X
+            { direction: new THREE.Vector3(0, 1, 0), color: 0x4ecdc4, label: 'Design' },      // +Y  
+            { direction: new THREE.Vector3(0, 0, 1), color: 0x45b7d1, label: 'AI' },         // +Z
+            { direction: new THREE.Vector3(-1, 0, 0), color: 0x96ceb4, label: 'Fabrication' } // -X
         ];
 
-        axisConfigs.forEach((config, index) => {
+        axesConfigs.forEach((config, index) => {
             // Create axis line
             const geometry = new THREE.CylinderGeometry(axisThickness, axisThickness, axisLength, 8);
             const material = new THREE.MeshLambertMaterial({ color: config.color });
             const axis = new THREE.Mesh(geometry, material);
             
-            // Position and rotate the axis
-            axis.position.copy(config.direction.clone().multiplyScalar(axisLength / 2));
-            axis.lookAt(config.direction.clone().add(axis.position));
-            axis.rotateX(Math.PI / 2);
+            // Position the axis at the origin and orient it
+            axis.position.set(0, 0, 0);
+            
+            if (config.direction.x !== 0) {
+                // X-axis (horizontal)
+                axis.rotation.z = Math.PI / 2;
+                axis.position.x = config.direction.x * axisLength / 2;
+            } else if (config.direction.y !== 0) {
+                // Y-axis (vertical)
+                axis.position.y = config.direction.y * axisLength / 2;
+            } else if (config.direction.z !== 0) {
+                // Z-axis (depth)
+                axis.rotation.x = Math.PI / 2;
+                axis.position.z = config.direction.z * axisLength / 2;
+            }
             
             this.scene.add(axis);
             this.axes.push(axis);
 
             // Create axis tip (arrow)
-            const tipGeometry = new THREE.ConeGeometry(0.3, 0.8, 8);
+            const tipGeometry = new THREE.ConeGeometry(0.2, 0.6, 8);
             const tip = new THREE.Mesh(tipGeometry, material);
             tip.position.copy(config.direction.clone().multiplyScalar(axisLength));
-            tip.lookAt(config.direction.clone().add(tip.position));
-            tip.rotateX(Math.PI / 2);
+            
+            if (config.direction.x !== 0) {
+                tip.rotation.z = Math.PI / 2;
+            } else if (config.direction.z !== 0) {
+                tip.rotation.x = Math.PI / 2;
+            }
             
             this.scene.add(tip);
 
@@ -135,7 +150,7 @@ class CareerGraph3D {
         });
 
         // Create origin sphere
-        const originGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+        const originGeometry = new THREE.SphereGeometry(0.15, 16, 16);
         const originMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
         const origin = new THREE.Mesh(originGeometry, originMaterial);
         origin.position.set(0, 0, 0);
@@ -297,7 +312,7 @@ class CareerGraph3D {
         const resetButton = document.getElementById('resetCamera');
         if (resetButton) {
             resetButton.addEventListener('click', () => {
-                this.camera.position.set(8, 6, 8);
+                this.camera.position.set(6, 4, 6);
                 this.camera.lookAt(0, 0, 0);
                 this.controls.target.set(0, 0, 0);
                 this.controls.update();
