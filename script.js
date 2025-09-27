@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             1000
         );
-        // Top-down view like Rhino plan view - higher up to see larger cross
-        this.camera.position.set(0, 15, 0);
+        // Angled side-top view like the second image (axonometric/isometric)
+        this.camera.position.set(8, 6, 8);
         this.camera.lookAt(0, 0, 0);
     }
 
@@ -105,39 +105,44 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 8;
+        const axisLength = 6;
         const axisThickness = 0.1;
-        const labelDistance = 10;
+        const labelDistance = 8;
 
-        // Create flat axes on the ground (Y=0) like Rhino plan view
+        // Create diagonal axes extending from center like the second image
         const axesConfigs = [
-            { direction: new THREE.Vector3(1, 0, 0), color: 0x000000, label: 'Tech' },        // +X
-            { direction: new THREE.Vector3(0, 0, 1), color: 0x000000, label: 'Design' },      // +Z
-            { direction: new THREE.Vector3(-1, 0, 0), color: 0x000000, label: 'Fabrication' }, // -X
-            { direction: new THREE.Vector3(0, 0, -1), color: 0x000000, label: 'AI' }           // -Z
+            { direction: new THREE.Vector3(-1, 0, -1).normalize(), color: 0x000000, label: 'Design' },        // upper-left
+            { direction: new THREE.Vector3(1, 0, -1).normalize(), color: 0x000000, label: 'Fabrication' },   // upper-right
+            { direction: new THREE.Vector3(-1, 0, 1).normalize(), color: 0x000000, label: 'Tech' },          // lower-left
+            { direction: new THREE.Vector3(1, 0, 1).normalize(), color: 0x000000, label: 'AI' }               // lower-right
         ];
 
         axesConfigs.forEach((config, index) => {
-            // Create flat axis line on the ground
-            const geometry = new THREE.BoxGeometry(axisLength, axisThickness, axisThickness);
+            // Create diagonal axis line
+            const geometry = new THREE.CylinderGeometry(axisThickness, axisThickness, axisLength, 8);
             const material = new THREE.MeshLambertMaterial({ color: config.color });
             const axis = new THREE.Mesh(geometry, material);
             
-            // Position the axis flat on the ground (Y=0)
+            // Position the axis at the origin
             axis.position.set(0, 0, 0);
             
+            // Calculate rotation to align with diagonal direction
+            const direction = config.direction.clone();
+            direction.y = 0; // Keep axes horizontal
+            direction.normalize();
+            
             // Position the axis along its direction
-            axis.position.copy(config.direction.clone().multiplyScalar(axisLength / 2));
+            axis.position.copy(direction.clone().multiplyScalar(axisLength / 2));
             
             // Rotate to align with direction
-            const angle = Math.atan2(config.direction.x, config.direction.z);
+            const angle = Math.atan2(direction.x, direction.z);
             axis.rotation.y = angle;
             
             this.scene.add(axis);
             this.axes.push(axis);
 
             // Create label
-            this.createLabel(config.label, config.direction.clone().multiplyScalar(labelDistance), config.color);
+            this.createLabel(config.label, direction.clone().multiplyScalar(labelDistance), config.color);
         });
     }
 
