@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             1000
         );
-        // Angled side-top view like the second image (axonometric/isometric)
-        this.camera.position.set(8, 6, 8);
+        // Much closer camera for better view
+        this.camera.position.set(4, 3, 4);
         this.camera.lookAt(0, 0, 0);
     }
 
@@ -105,9 +105,9 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 6;
-        const axisThickness = 0.1;
-        const labelDistance = 8;
+        const axisLength = 3;
+        const axisThickness = 0.2;
+        const labelDistance = 4;
 
         // Create diagonal axes extending from center like the second image
         const axesConfigs = [
@@ -118,7 +118,7 @@ class CareerGraph3D {
         ];
 
         axesConfigs.forEach((config, index) => {
-            // Create diagonal axis line
+            // Create thick cylindrical axis
             const geometry = new THREE.CylinderGeometry(axisThickness, axisThickness, axisLength, 8);
             const material = new THREE.MeshLambertMaterial({ color: config.color });
             const axis = new THREE.Mesh(geometry, material);
