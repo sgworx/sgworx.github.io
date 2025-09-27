@@ -38,7 +38,7 @@ class CareerGraph3D {
             0.1,
             1000
         );
-        this.camera.position.set(6, 4, 6);
+        this.camera.position.set(5, 8, 5);
         this.camera.lookAt(0, 0, 0);
     }
 
@@ -97,14 +97,14 @@ class CareerGraph3D {
     createAxes() {
         const axisLength = 4;
         const axisThickness = 0.05;
-        const labelDistance = 5;
+        const labelDistance = 5.5;
 
-        // Create X, Y, Z axes at the origin
+        // Create the four career axes in a cross pattern (axonometric view)
         const axesConfigs = [
-            { direction: new THREE.Vector3(1, 0, 0), color: 0xff6b6b, label: 'Tech/Product' }, // +X
-            { direction: new THREE.Vector3(0, 1, 0), color: 0x4ecdc4, label: 'Design' },      // +Y  
-            { direction: new THREE.Vector3(0, 0, 1), color: 0x45b7d1, label: 'AI' },         // +Z
-            { direction: new THREE.Vector3(-1, 0, 0), color: 0x96ceb4, label: 'Fabrication' } // -X
+            { direction: new THREE.Vector3(-1, 0, -1).normalize(), color: 0x333333, label: 'Design' },        // upper-left
+            { direction: new THREE.Vector3(1, 0, -1).normalize(), color: 0x333333, label: 'Fabrication' },   // upper-right
+            { direction: new THREE.Vector3(-1, 0, 1).normalize(), color: 0x333333, label: 'Tech' },          // lower-left
+            { direction: new THREE.Vector3(1, 0, 1).normalize(), color: 0x333333, label: 'AI' }               // lower-right
         ];
 
         axesConfigs.forEach((config, index) => {
@@ -116,45 +116,58 @@ class CareerGraph3D {
             // Position the axis at the origin and orient it
             axis.position.set(0, 0, 0);
             
-            if (config.direction.x !== 0) {
-                // X-axis (horizontal)
-                axis.rotation.z = Math.PI / 2;
-                axis.position.x = config.direction.x * axisLength / 2;
-            } else if (config.direction.y !== 0) {
-                // Y-axis (vertical)
-                axis.position.y = config.direction.y * axisLength / 2;
-            } else if (config.direction.z !== 0) {
-                // Z-axis (depth)
-                axis.rotation.x = Math.PI / 2;
-                axis.position.z = config.direction.z * axisLength / 2;
-            }
+            // Calculate rotation to align with direction
+            const direction = config.direction.clone();
+            direction.y = 0; // Keep axes horizontal
+            direction.normalize();
+            
+            // Position the axis
+            axis.position.copy(direction.clone().multiplyScalar(axisLength / 2));
+            
+            // Rotate to align with direction
+            const angle = Math.atan2(direction.x, direction.z);
+            axis.rotation.y = angle;
             
             this.scene.add(axis);
             this.axes.push(axis);
 
             // Create axis tip (arrow)
-            const tipGeometry = new THREE.ConeGeometry(0.2, 0.6, 8);
+            const tipGeometry = new THREE.ConeGeometry(0.15, 0.4, 8);
             const tip = new THREE.Mesh(tipGeometry, material);
-            tip.position.copy(config.direction.clone().multiplyScalar(axisLength));
-            
-            if (config.direction.x !== 0) {
-                tip.rotation.z = Math.PI / 2;
-            } else if (config.direction.z !== 0) {
-                tip.rotation.x = Math.PI / 2;
-            }
+            tip.position.copy(direction.clone().multiplyScalar(axisLength));
+            tip.rotation.y = angle;
             
             this.scene.add(tip);
 
             // Create label
-            this.createLabel(config.label, config.direction.clone().multiplyScalar(labelDistance), config.color);
+            this.createLabel(config.label, direction.clone().multiplyScalar(labelDistance), config.color);
         });
 
-        // Create origin sphere
-        const originGeometry = new THREE.SphereGeometry(0.15, 16, 16);
-        const originMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
-        const origin = new THREE.Mesh(originGeometry, originMaterial);
-        origin.position.set(0, 0, 0);
-        this.scene.add(origin);
+        // Create the green X-shaped crossing lines
+        this.createCrossingLines();
+    }
+
+    createCrossingLines() {
+        const lineLength = 3;
+        const lineThickness = 0.08;
+        
+        // First diagonal: Design to AI (upper-left to lower-right)
+        const line1Geometry = new THREE.CylinderGeometry(lineThickness, lineThickness, lineLength, 8);
+        const line1Material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+        const line1 = new THREE.Mesh(line1Geometry, line1Material);
+        line1.position.set(0, 0, 0);
+        line1.rotation.y = Math.PI / 4; // 45 degrees
+        line1.rotation.z = Math.PI / 2; // Make it horizontal
+        this.scene.add(line1);
+
+        // Second diagonal: Fabrication to Tech (upper-right to lower-left)
+        const line2Geometry = new THREE.CylinderGeometry(lineThickness, lineThickness, lineLength, 8);
+        const line2Material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+        const line2 = new THREE.Mesh(line2Geometry, line2Material);
+        line2.position.set(0, 0, 0);
+        line2.rotation.y = -Math.PI / 4; // -45 degrees
+        line2.rotation.z = Math.PI / 2; // Make it horizontal
+        this.scene.add(line2);
     }
 
     createLabel(text, position, color) {
@@ -312,7 +325,7 @@ class CareerGraph3D {
         const resetButton = document.getElementById('resetCamera');
         if (resetButton) {
             resetButton.addEventListener('click', () => {
-                this.camera.position.set(6, 4, 6);
+                this.camera.position.set(5, 8, 5);
                 this.camera.lookAt(0, 0, 0);
                 this.controls.target.set(0, 0, 0);
                 this.controls.update();
