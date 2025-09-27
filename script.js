@@ -45,14 +45,12 @@ class CareerGraph3D {
         this.renderer = new THREE.WebGLRenderer({
             canvas: document.getElementById('canvas'),
             antialias: true,
-            alpha: true
+            alpha: false
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 1.2;
+        this.renderer.shadowMap.enabled = false;
+        this.renderer.toneMapping = THREE.NoToneMapping;
     }
 
     setupControls() {
@@ -91,28 +89,14 @@ class CareerGraph3D {
     }
 
     setupLights() {
-        // Ambient light
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+        // Simple white lighting for black and white only
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         this.scene.add(ambientLight);
 
         // Main directional light
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
         directionalLight.position.set(10, 10, 5);
-        directionalLight.castShadow = true;
-        directionalLight.shadow.mapSize.width = 2048;
-        directionalLight.shadow.mapSize.height = 2048;
-        directionalLight.shadow.camera.near = 0.5;
-        directionalLight.shadow.camera.far = 50;
-        directionalLight.shadow.camera.left = -20;
-        directionalLight.shadow.camera.right = 20;
-        directionalLight.shadow.camera.top = 20;
-        directionalLight.shadow.camera.bottom = -20;
         this.scene.add(directionalLight);
-
-        // Point light for accent
-        const pointLight = new THREE.PointLight(0x4ecdc4, 0.8, 30);
-        pointLight.position.set(0, 5, 0);
-        this.scene.add(pointLight);
     }
 
     createAxes() {
@@ -278,39 +262,35 @@ class CareerGraph3D {
     }
 
     createFallbackPerson() {
-        // Create a simple person representation if model fails to load
+        // Create a simple person representation if model fails to load - black and white only
         const group = new THREE.Group();
         
-        // Body
+        // Body - black
         const bodyGeometry = new THREE.CylinderGeometry(0.3, 0.4, 1.5, 8);
-        const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+        const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
         body.position.y = 0.75;
-        body.castShadow = true;
         group.add(body);
         
-        // Head
+        // Head - black
         const headGeometry = new THREE.SphereGeometry(0.25, 16, 16);
-        const headMaterial = new THREE.MeshLambertMaterial({ color: 0xFFDBB5 });
+        const headMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const head = new THREE.Mesh(headGeometry, headMaterial);
         head.position.y = 1.5;
-        head.castShadow = true;
         group.add(head);
         
-        // Arms
+        // Arms - black
         const armGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 8);
-        const armMaterial = new THREE.MeshLambertMaterial({ color: 0xFFDBB5 });
+        const armMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         
         const leftArm = new THREE.Mesh(armGeometry, armMaterial);
         leftArm.position.set(-0.4, 1, 0);
         leftArm.rotation.z = Math.PI / 4;
-        leftArm.castShadow = true;
         group.add(leftArm);
         
         const rightArm = new THREE.Mesh(armGeometry, armMaterial);
         rightArm.position.set(0.4, 1, 0);
         rightArm.rotation.z = -Math.PI / 4;
-        rightArm.castShadow = true;
         group.add(rightArm);
         
         this.personModel = group;
