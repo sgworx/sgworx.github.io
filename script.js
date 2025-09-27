@@ -41,7 +41,8 @@ class CareerGraph3D {
             0.1,
             1000
         );
-        this.camera.position.set(5, 8, 5);
+        // Top view angle - looking down at the cross
+        this.camera.position.set(0, 10, 0);
         this.camera.lookAt(0, 0, 0);
     }
 
@@ -104,16 +105,16 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 4;
-        const axisThickness = 0.05;
-        const labelDistance = 5.5;
+        const axisLength = 6;
+        const axisThickness = 0.15;
+        const labelDistance = 8;
 
-        // Create the four career axes in a cross pattern (axonometric view)
+        // Create the four career axes in a proper cross pattern
         const axesConfigs = [
-            { direction: new THREE.Vector3(-1, 0, -1).normalize(), color: 0x000000, label: 'Design' },        // upper-left
-            { direction: new THREE.Vector3(1, 0, -1).normalize(), color: 0x000000, label: 'Fabrication' },   // upper-right
-            { direction: new THREE.Vector3(-1, 0, 1).normalize(), color: 0x000000, label: 'Tech' },          // lower-left
-            { direction: new THREE.Vector3(1, 0, 1).normalize(), color: 0x000000, label: 'AI' }               // lower-right
+            { direction: new THREE.Vector3(-1, 0, 0), color: 0x000000, label: 'Design' },        // left
+            { direction: new THREE.Vector3(1, 0, 0), color: 0x000000, label: 'Fabrication' },   // right
+            { direction: new THREE.Vector3(0, 0, -1), color: 0x000000, label: 'Tech' },          // front
+            { direction: new THREE.Vector3(0, 0, 1), color: 0x000000, label: 'AI' }               // back
         ];
 
         axesConfigs.forEach((config, index) => {
@@ -122,7 +123,7 @@ class CareerGraph3D {
             const material = new THREE.MeshLambertMaterial({ color: config.color });
             const axis = new THREE.Mesh(geometry, material);
             
-            // Position the axis at the origin and orient it
+            // Position the axis at the origin
             axis.position.set(0, 0, 0);
             
             // Calculate rotation to align with direction
@@ -157,7 +158,7 @@ class CareerGraph3D {
         context.fillRect(0, 0, canvas.width, canvas.height);
         
         context.fillStyle = '#000000';
-        context.font = 'bold 24px Helvetica Neue, Helvetica, Arial, sans-serif';
+        context.font = 'bold 32px Helvetica Neue, Helvetica, Arial, sans-serif';
         context.textAlign = 'center';
         context.textBaseline = 'middle';
         context.fillText(text, canvas.width / 2, canvas.height / 2);
@@ -168,7 +169,7 @@ class CareerGraph3D {
         const sprite = new THREE.Sprite(material);
         
         sprite.position.copy(position);
-        sprite.scale.set(2, 0.5, 1);
+        sprite.scale.set(3, 0.8, 1);
         
         this.scene.add(sprite);
         this.labels.push(sprite);
@@ -236,31 +237,31 @@ class CareerGraph3D {
         // Create a simple person representation if model fails to load - black and white only
         const group = new THREE.Group();
         
-        // Body - black
-        const bodyGeometry = new THREE.CylinderGeometry(0.3, 0.4, 1.5, 8);
+        // Body - black, larger scale
+        const bodyGeometry = new THREE.CylinderGeometry(0.4, 0.5, 2, 8);
         const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        body.position.y = 0.75;
+        body.position.y = 1;
         group.add(body);
         
-        // Head - black
-        const headGeometry = new THREE.SphereGeometry(0.25, 16, 16);
+        // Head - black, larger scale
+        const headGeometry = new THREE.SphereGeometry(0.35, 16, 16);
         const headMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const head = new THREE.Mesh(headGeometry, headMaterial);
-        head.position.y = 1.5;
+        head.position.y = 2;
         group.add(head);
         
-        // Arms - black
-        const armGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 8);
+        // Arms - black, larger scale
+        const armGeometry = new THREE.CylinderGeometry(0.15, 0.15, 1.2, 8);
         const armMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
         
         const leftArm = new THREE.Mesh(armGeometry, armMaterial);
-        leftArm.position.set(-0.4, 1, 0);
+        leftArm.position.set(-0.6, 1.5, 0);
         leftArm.rotation.z = Math.PI / 4;
         group.add(leftArm);
         
         const rightArm = new THREE.Mesh(armGeometry, armMaterial);
-        rightArm.position.set(0.4, 1, 0);
+        rightArm.position.set(0.6, 1.5, 0);
         rightArm.rotation.z = -Math.PI / 4;
         group.add(rightArm);
         
