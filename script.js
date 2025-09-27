@@ -140,44 +140,11 @@ class CareerGraph3D {
             this.scene.add(axis);
             this.axes.push(axis);
 
-            // Create axis tip (arrow)
-            const tipGeometry = new THREE.ConeGeometry(0.15, 0.4, 8);
-            const tip = new THREE.Mesh(tipGeometry, material);
-            tip.position.copy(direction.clone().multiplyScalar(axisLength));
-            tip.rotation.y = angle;
-            
-            this.scene.add(tip);
-
             // Create label
             this.createLabel(config.label, direction.clone().multiplyScalar(labelDistance), config.color);
         });
-
-        // Create the green X-shaped crossing lines
-        this.createCrossingLines();
     }
 
-    createCrossingLines() {
-        const lineLength = 3;
-        const lineThickness = 0.08;
-        
-        // First diagonal: Design to AI (upper-left to lower-right)
-        const line1Geometry = new THREE.CylinderGeometry(lineThickness, lineThickness, lineLength, 8);
-        const line1Material = new THREE.MeshLambertMaterial({ color: 0x000000 });
-        const line1 = new THREE.Mesh(line1Geometry, line1Material);
-        line1.position.set(0, 0, 0);
-        line1.rotation.y = Math.PI / 4; // 45 degrees
-        line1.rotation.z = Math.PI / 2; // Make it horizontal
-        this.scene.add(line1);
-
-        // Second diagonal: Fabrication to Tech (upper-right to lower-left)
-        const line2Geometry = new THREE.CylinderGeometry(lineThickness, lineThickness, lineLength, 8);
-        const line2Material = new THREE.MeshLambertMaterial({ color: 0x000000 });
-        const line2 = new THREE.Mesh(line2Geometry, line2Material);
-        line2.position.set(0, 0, 0);
-        line2.rotation.y = -Math.PI / 4; // -45 degrees
-        line2.rotation.z = Math.PI / 2; // Make it horizontal
-        this.scene.add(line2);
-    }
 
     createLabel(text, position, color) {
         // Create canvas for text
@@ -326,12 +293,6 @@ class CareerGraph3D {
         if (this.personModel) {
             this.personModel.rotation.y += 0.005;
         }
-        
-        // Subtle axis pulsing
-        this.axes.forEach((axis, index) => {
-            const time = Date.now() * 0.001;
-            axis.scale.y = 1 + Math.sin(time + index) * 0.05;
-        });
         
         this.renderer.render(this.scene, this.camera);
     }
