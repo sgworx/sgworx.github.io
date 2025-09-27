@@ -57,15 +57,37 @@ class CareerGraph3D {
 
     setupControls() {
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        
+        // Rhino-style navigation settings
         this.controls.enableDamping = true;
-        this.controls.dampingFactor = 0.05;
+        this.controls.dampingFactor = 0.1;
+        
+        // Mouse controls (like Rhino):
+        // Left mouse: Rotate around target
+        // Right mouse: Pan (translate)
+        // Middle mouse wheel: Zoom
         this.controls.enableZoom = true;
         this.controls.enablePan = true;
+        this.controls.enableRotate = true;
+        
+        // Zoom settings (like Rhino)
+        this.controls.zoomSpeed = 1.2;
+        this.controls.minDistance = 2;
+        this.controls.maxDistance = 50;
+        
+        // Rotation settings (like Rhino)
+        this.controls.rotateSpeed = 1.0;
+        this.controls.panSpeed = 1.0;
+        
+        // Allow full rotation (not limited like before)
+        this.controls.maxPolarAngle = Math.PI;
+        this.controls.minPolarAngle = 0;
+        
+        // No auto-rotate
         this.controls.autoRotate = false;
-        this.controls.autoRotateSpeed = 0.5;
-        this.controls.maxPolarAngle = Math.PI / 2;
-        this.controls.minDistance = 3;
-        this.controls.maxDistance = 20;
+        
+        // Set initial target to origin
+        this.controls.target.set(0, 0, 0);
     }
 
     setupLights() {
@@ -330,5 +352,12 @@ class CareerGraph3D {
 
 // Initialize the application when the page loads
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if Three.js is available
+    if (typeof THREE === 'undefined') {
+        console.error('Three.js is not loaded. Please check the CDN links.');
+        document.body.innerHTML = '<div style="text-align: center; padding: 50px; font-family: Helvetica Neue; color: #333;"><h2>Loading Error</h2><p>Three.js library failed to load. Please refresh the page.</p></div>';
+        return;
+    }
+    
     new CareerGraph3D();
 });
