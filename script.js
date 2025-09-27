@@ -27,8 +27,7 @@ class CareerGraph3D {
 
     setupScene() {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x1a1a2e);
-        this.scene.fog = new THREE.Fog(0x1a1a2e, 10, 50);
+        this.scene.background = new THREE.Color(0xffffff);
     }
 
     setupCamera() {
@@ -101,10 +100,10 @@ class CareerGraph3D {
 
         // Create the four career axes in a cross pattern (axonometric view)
         const axesConfigs = [
-            { direction: new THREE.Vector3(-1, 0, -1).normalize(), color: 0x333333, label: 'Design' },        // upper-left
-            { direction: new THREE.Vector3(1, 0, -1).normalize(), color: 0x333333, label: 'Fabrication' },   // upper-right
-            { direction: new THREE.Vector3(-1, 0, 1).normalize(), color: 0x333333, label: 'Tech' },          // lower-left
-            { direction: new THREE.Vector3(1, 0, 1).normalize(), color: 0x333333, label: 'AI' }               // lower-right
+            { direction: new THREE.Vector3(-1, 0, -1).normalize(), color: 0x000000, label: 'Design' },        // upper-left
+            { direction: new THREE.Vector3(1, 0, -1).normalize(), color: 0x000000, label: 'Fabrication' },   // upper-right
+            { direction: new THREE.Vector3(-1, 0, 1).normalize(), color: 0x000000, label: 'Tech' },          // lower-left
+            { direction: new THREE.Vector3(1, 0, 1).normalize(), color: 0x000000, label: 'AI' }               // lower-right
         ];
 
         axesConfigs.forEach((config, index) => {
@@ -153,7 +152,7 @@ class CareerGraph3D {
         
         // First diagonal: Design to AI (upper-left to lower-right)
         const line1Geometry = new THREE.CylinderGeometry(lineThickness, lineThickness, lineLength, 8);
-        const line1Material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+        const line1Material = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const line1 = new THREE.Mesh(line1Geometry, line1Material);
         line1.position.set(0, 0, 0);
         line1.rotation.y = Math.PI / 4; // 45 degrees
@@ -162,7 +161,7 @@ class CareerGraph3D {
 
         // Second diagonal: Fabrication to Tech (upper-right to lower-left)
         const line2Geometry = new THREE.CylinderGeometry(lineThickness, lineThickness, lineLength, 8);
-        const line2Material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+        const line2Material = new THREE.MeshLambertMaterial({ color: 0x000000 });
         const line2 = new THREE.Mesh(line2Geometry, line2Material);
         line2.position.set(0, 0, 0);
         line2.rotation.y = -Math.PI / 4; // -45 degrees
@@ -177,11 +176,11 @@ class CareerGraph3D {
         canvas.width = 256;
         canvas.height = 64;
         
-        context.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        context.fillStyle = 'rgba(255, 255, 255, 0)';
         context.fillRect(0, 0, canvas.width, canvas.height);
         
-        context.fillStyle = `#${color.toString(16).padStart(6, '0')}`;
-        context.font = 'bold 24px Arial';
+        context.fillStyle = '#000000';
+        context.font = 'bold 24px Helvetica Neue, Helvetica, Arial, sans-serif';
         context.textAlign = 'center';
         context.textBaseline = 'middle';
         context.fillText(text, canvas.width / 2, canvas.height / 2);
@@ -297,10 +296,7 @@ class CareerGraph3D {
     }
 
     hideLoading() {
-        const loading = document.getElementById('loading');
-        if (loading) {
-            loading.style.display = 'none';
-        }
+        // No loading screen in minimal design
     }
 
     setupEventListeners() {
@@ -309,53 +305,6 @@ class CareerGraph3D {
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Camera speed control
-        const cameraSpeedSlider = document.getElementById('cameraSpeed');
-        if (cameraSpeedSlider) {
-            cameraSpeedSlider.addEventListener('input', (e) => {
-                this.cameraSpeed = parseFloat(e.target.value);
-                this.controls.rotateSpeed = this.cameraSpeed;
-                this.controls.zoomSpeed = this.cameraSpeed;
-            });
-        }
-
-        // Reset camera button
-        const resetButton = document.getElementById('resetCamera');
-        if (resetButton) {
-            resetButton.addEventListener('click', () => {
-                this.camera.position.set(5, 8, 5);
-                this.camera.lookAt(0, 0, 0);
-                this.controls.target.set(0, 0, 0);
-                this.controls.update();
-            });
-        }
-
-        // Auto rotate toggle
-        const autoRotateButton = document.getElementById('toggleAutoRotate');
-        if (autoRotateButton) {
-            autoRotateButton.addEventListener('click', () => {
-                this.autoRotate = !this.autoRotate;
-                this.controls.autoRotate = this.autoRotate;
-                autoRotateButton.textContent = this.autoRotate ? 'Stop Auto Rotate' : 'Auto Rotate';
-            });
-        }
-
-        // Axis hover effects
-        const axisItems = document.querySelectorAll('.axis-item');
-        axisItems.forEach((item, index) => {
-            item.addEventListener('mouseenter', () => {
-                if (this.axes[index]) {
-                    this.axes[index].material.emissive.setHex(0x333333);
-                }
-            });
-            
-            item.addEventListener('mouseleave', () => {
-                if (this.axes[index]) {
-                    this.axes[index].material.emissive.setHex(0x000000);
-                }
-            });
         });
     }
 
