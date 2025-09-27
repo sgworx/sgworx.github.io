@@ -134,9 +134,10 @@ class CareerGraph3D {
             // Position the axis along its direction
             axis.position.copy(direction.clone().multiplyScalar(axisLength / 2));
             
-            // Rotate to align with direction
+            // Rotate to lay flat on the ground (horizontal) and align with direction
             const angle = Math.atan2(direction.x, direction.z);
             axis.rotation.y = angle;
+            axis.rotation.x = Math.PI / 2; // Rotate 90 degrees to lay flat on ground
             
             this.scene.add(axis);
             this.axes.push(axis);
