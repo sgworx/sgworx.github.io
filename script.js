@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             100
         );
-        // Angled view with Design at top
-        this.camera.position.set(-0.6, 1.2, -0.8); // Left side view, Design appears at top
+        // Rotated cross view - more to the right and lower
+        this.camera.position.set(0.4, 1.0, -1.0); // More to the right, lower angle
         this.camera.lookAt(0, 0, 0); // Look directly at the origin
     }
 
