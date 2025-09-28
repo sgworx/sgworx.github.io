@@ -119,7 +119,7 @@ class CareerGraph3D {
         const horizontalGeometry = new THREE.CylinderGeometry(axisRadius, axisRadius, axisLength, 32, 1, false);
         const horizontalMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
         const horizontalAxis = new THREE.Mesh(horizontalGeometry, horizontalMaterial);
-        horizontalAxis.position.set(0, -0.05, 0); // Move cross down to avoid overlap
+        horizontalAxis.position.set(0, -0.01, 0);
         horizontalAxis.rotation.x = Math.PI / 2;
         horizontalAxis.rotation.z = Math.PI / 2;
         this.scene.add(horizontalAxis);
@@ -129,7 +129,7 @@ class CareerGraph3D {
         const verticalGeometry = new THREE.CylinderGeometry(axisRadius, axisRadius, axisLength, 32, 1, false);
         const verticalMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
         const verticalAxis = new THREE.Mesh(verticalGeometry, verticalMaterial);
-        verticalAxis.position.set(0, -0.05, 0); // Move cross down to avoid overlap
+        verticalAxis.position.set(0, -0.01, 0);
         verticalAxis.rotation.x = Math.PI / 2;
         this.scene.add(verticalAxis);
         this.axes.push(verticalAxis);
@@ -148,37 +148,37 @@ class CareerGraph3D {
     }
 
     createLabel(text, pos) {
-        // Create sprite that always faces camera
         const canvas = document.createElement('canvas');
         canvas.width = 512;
-        canvas.height = 128;
+        canvas.height = 64;
         const ctx = canvas.getContext('2d');
-        
-        // Clear canvas with transparent background
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw text
-        ctx.font = 'bold 48px Helvetica Neue, Helvetica, Arial, sans-serif';
-        ctx.fillStyle = '#000000';
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = 'bold 36px Helvetica Neue, Helvetica, Arial, sans-serif';
+        ctx.fillStyle = '#000';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
         const texture = new THREE.CanvasTexture(canvas);
-        const spriteMaterial = new THREE.SpriteMaterial({ 
-            map: texture,
-            transparent: true
+        
+        // Create a plane geometry to lay flat on ground (very small like reference)
+        const geometry = new THREE.PlaneGeometry(0.15, 0.03); // Very small text labels
+        const material = new THREE.MeshBasicMaterial({ 
+            map: texture, 
+            transparent: true,
+            side: THREE.DoubleSide
         });
-        const sprite = new THREE.Sprite(spriteMaterial);
+        const textPlane = new THREE.Mesh(geometry, material);
         
-        // Position sprite at the given position
-        sprite.position.copy(pos);
-        sprite.position.y = 0; // At ground level
+        textPlane.position.copy(pos);
+        textPlane.position.y = -0.005; // At the same level as the axes
+        textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
         
-        // Scale sprite appropriately
-        sprite.scale.set(0.3, 0.075, 1);
+        // Keep text horizontal and upright - no Y rotation
+        // Text always faces viewer directly like standard reading text
         
-        this.scene.add(sprite);
+        this.scene.add(textPlane);
     }
 
     loadPersonModel() {
@@ -206,10 +206,10 @@ class CareerGraph3D {
             
             loader.load(
                 modelPath,
-                (gltf) => {
-                    this.personModel = gltf.scene;
-                    this.personModel.position.set(0, 0.01, 0);
-                    this.personModel.scale.set(0.18, 0.18, 0.18);
+                    (gltf) => {
+                        this.personModel = gltf.scene;
+                        this.personModel.position.set(0, 0.05, 0); // Raised up to avoid overlapping with cross
+                        this.personModel.scale.set(0.18, 0.18, 0.18);
                     
                     // Enable shadows
                     this.personModel.traverse((child) => {
