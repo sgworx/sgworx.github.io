@@ -208,7 +208,7 @@ class CareerGraph3D {
                 modelPath,
                     (gltf) => {
                         this.personModel = gltf.scene;
-                        this.personModel.position.set(0, 0.05, 0); // Raised up to avoid overlapping with cross
+                        this.personModel.position.set(0, 0.08, 0); // Raised higher to fully avoid overlapping with cross
                         this.personModel.scale.set(0.18, 0.18, 0.18);
                     
                     // Enable shadows
