@@ -136,7 +136,7 @@ class CareerGraph3D {
         this.axes.push(verticalAxis);
 
         // Position labels at the ends of each axis line, with proper spacing
-        const labelDistance = 0.45; // Distance from center to label (slightly beyond axis end)
+        const labelDistance = 0.225; // Distance from center to label (half the previous distance)
         
         // Reposition labels: Design at top - all rotated 180°
         this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance), '180');      // Top - rotate 180°
