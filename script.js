@@ -142,8 +142,14 @@ class CareerGraph3D {
             this.scene.add(axis);
             this.axes.push(axis);
 
-            // Create label at the end of the axis (perpendicular to axis direction)
-            const labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.12); // Adjust for smaller cross
+            // Create label at the end of the axis with specific positioning adjustments
+            let labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.12);
+            
+            // Adjust Design label to move it left to avoid axis overlap
+            if (config.label === 'Design') {
+                labelPosition.x -= 0.05; // Move Design label slightly left
+            }
+            
             this.createLabel(config.label, labelPosition, config.direction);
         });
     }
