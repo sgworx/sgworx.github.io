@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             100
         );
-        // Lower right perspective view - bit down and to the right
-        this.camera.position.set(1.2, 0.8, -0.6); // Right side (higher X), lower Y, angled view
+        // More top-down view angle
+        this.camera.position.set(0.8, 1.6, -0.4); // Higher Y for more top view, less angled
         this.camera.lookAt(0, 0, 0); // Look directly at the origin
     }
 
