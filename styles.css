@@ -69,6 +69,6 @@ body {
 
 .year:active,
 .year.active {
-    background: rgb(251, 247, 247);
+    background: yellow;
     border-color: #000;
 }
