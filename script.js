@@ -298,18 +298,9 @@ class CareerGraph3D {
         // Clear existing years
         yearsContainer.innerHTML = '';
         
-        // Add 2017 first
-        const year2017 = document.createElement('div');
-        year2017.className = 'year active';
-        year2017.setAttribute('data-year', '2017');
-        year2017.textContent = '2017';
-        year2017.addEventListener('click', (e) => {
-            this.collapseYears();
-        });
-        yearsContainer.appendChild(year2017);
-        
-        // Add intermediate years
-        intermediateYears.forEach(year => {
+        // Add 2025, 2024, 2023 (keep them at the top)
+        const topYears = ['2025', '2024', '2023'];
+        topYears.forEach(year => {
             const yearElement = document.createElement('div');
             yearElement.className = 'year';
             yearElement.setAttribute('data-year', year);
@@ -333,6 +324,32 @@ class CareerGraph3D {
             this.collapseYears();
         });
         yearsContainer.appendChild(year2022);
+        
+        // Add intermediate years below 2022
+        intermediateYears.forEach(year => {
+            const yearElement = document.createElement('div');
+            yearElement.className = 'year';
+            yearElement.setAttribute('data-year', year);
+            yearElement.textContent = year;
+            yearElement.addEventListener('click', (e) => {
+                // Remove active class from all years
+                yearsContainer.querySelectorAll('.year').forEach(el => el.classList.remove('active'));
+                // Add active class to clicked year
+                e.target.classList.add('active');
+                this.movePersonToYear(year);
+            });
+            yearsContainer.appendChild(yearElement);
+        });
+        
+        // Add 2017 at the bottom
+        const year2017 = document.createElement('div');
+        year2017.className = 'year active';
+        year2017.setAttribute('data-year', '2017');
+        year2017.textContent = '2017';
+        year2017.addEventListener('click', (e) => {
+            this.collapseYears();
+        });
+        yearsContainer.appendChild(year2017);
         
         // Move person to 2017 position
         this.movePersonToYear('2017');
