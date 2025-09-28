@@ -142,12 +142,18 @@ class CareerGraph3D {
             this.scene.add(axis);
             this.axes.push(axis);
 
-            // Create label at the end of the axis with specific positioning adjustments
-            let labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.12);
+            // Position labels in screen-relative positions like traditional graph labels
+            let labelPosition = new THREE.Vector3();
             
-            // Move Design label down to avoid axis overlap
+            // Position labels based on their intended screen positions
             if (config.label === 'Design') {
-                labelPosition.z -= 0.05; // Move Design label down (negative Z)
+                labelPosition.set(-0.4, 0, 0.4); // Top-left
+            } else if (config.label === 'Fabrication') {
+                labelPosition.set(0.4, 0, 0.4); // Top-right
+            } else if (config.label === 'Tech/Product') {
+                labelPosition.set(-0.4, 0, -0.4); // Bottom-left
+            } else if (config.label === 'AI') {
+                labelPosition.set(0.4, 0, -0.4); // Bottom-right
             }
             
             this.createLabel(config.label, labelPosition, config.direction);
