@@ -135,9 +135,9 @@ class CareerGraph3D {
             if (config.direction.x !== 0) axis.rotation.z = Math.PI / 2;
             if (config.direction.z < 0 || config.direction.x < 0) axis.rotation.y = Math.PI;
             
-            // Position the axis along its direction at the bottom of the GLB model
+            // Position the axis along its direction at the feet of the GLB model
             axis.position.add(config.direction.clone().multiplyScalar(axisLength / 2));
-            axis.position.y = -0.01; // Slightly below ground level to be at bottom of model
+            axis.position.y = -0.1; // Move down to feet level to avoid clash
             
             this.scene.add(axis);
             this.axes.push(axis);
