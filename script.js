@@ -151,11 +151,11 @@ class CareerGraph3D {
     createLabel(text, pos, rotate90 = false) {
         const canvas = document.createElement('canvas');
         canvas.width = 512;
-        canvas.height = 128;
+        canvas.height = 90;
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.font = 'bold 72px Helvetica Neue, Helvetica, Arial, sans-serif';
+        ctx.font = 'bold 50px Helvetica Neue, Helvetica, Arial, sans-serif';
         ctx.fillStyle = '#000';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -164,7 +164,7 @@ class CareerGraph3D {
         const texture = new THREE.CanvasTexture(canvas);
         
         // Create a plane geometry to lay flat on ground (very small like reference)
-        const geometry = new THREE.PlaneGeometry(0.3, 0.06); // Double size for larger text
+        const geometry = new THREE.PlaneGeometry(0.21, 0.042); // Scaled down by 30%
         const material = new THREE.MeshBasicMaterial({ 
             map: texture, 
             transparent: true,
