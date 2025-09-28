@@ -110,61 +110,42 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 0.4; // Scale down by 20% (0.5 * 0.8)
+        const axisLength = 0.8; // Full cross length (was creating 4 separate pieces)
         const axisRadius = 0.004; // Keep same thickness
         
-        // Create centered cross made of four thick black lines on the ground plane (Y=0)
-        const axesConfigs = [
-            { direction: new THREE.Vector3(0, 0, 1), label: 'Design' },        // Top (positive Z)
-            { direction: new THREE.Vector3(1, 0, 0), label: 'Fabrication' },   // Right (positive X)
-            { direction: new THREE.Vector3(0, 0, -1), label: 'AI' },        // Bottom (negative Z)
-            { direction: new THREE.Vector3(-1, 0, 0), label: 'Tech/Product' }  // Left (negative X)
-        ];
+        // Create two continuous lines that form a cross (not 4 separate pieces)
+        
+        // Horizontal line (X-axis: Tech/Product to Fabrication)
+        const horizontalGeometry = new THREE.CylinderGeometry(axisRadius, axisRadius, axisLength, 32, 1, false);
+        const horizontalMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const horizontalAxis = new THREE.Mesh(horizontalGeometry, horizontalMaterial);
+        horizontalAxis.position.set(0, -0.01, 0);
+        horizontalAxis.rotation.x = Math.PI / 2;
+        horizontalAxis.rotation.z = Math.PI / 2;
+        this.scene.add(horizontalAxis);
+        this.axes.push(horizontalAxis);
+        
+        // Vertical line (Z-axis: Design to AI)
+        const verticalGeometry = new THREE.CylinderGeometry(axisRadius, axisRadius, axisLength, 32, 1, false);
+        const verticalMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const verticalAxis = new THREE.Mesh(verticalGeometry, verticalMaterial);
+        verticalAxis.position.set(0, -0.01, 0);
+        verticalAxis.rotation.x = Math.PI / 2;
+        this.scene.add(verticalAxis);
+        this.axes.push(verticalAxis);
 
-        axesConfigs.forEach((config, index) => {
-            // Create thick cylindrical axis
-            const geometry = new THREE.CylinderGeometry(axisRadius, axisRadius, axisLength, 32, 1, false);
-            const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
-            const axis = new THREE.Mesh(geometry, material);
-            
-            // Position the axis at the origin
-            axis.position.set(0, 0, 0);
-            
-            // Rotate to lay flat on the ground
-            axis.rotation.x = Math.PI / 2;
-            if (config.direction.x !== 0) axis.rotation.z = Math.PI / 2;
-            if (config.direction.z < 0 || config.direction.x < 0) axis.rotation.y = Math.PI;
-            
-            // Position the axis along its direction at the bottom of the GLB model
-            axis.position.add(config.direction.clone().multiplyScalar(axisLength / 2));
-            axis.position.y = -0.01; // Slightly below ground level to be at bottom of model
-            
-            this.scene.add(axis);
-            this.axes.push(axis);
-
-            // Position labels in screen-relative positions like traditional graph labels
-            let labelPosition = new THREE.Vector3();
-            
-            // Position labels based on their intended screen positions
-            if (config.label === 'Design') {
-                labelPosition.set(-0.4, 0, 0.4); // Top-left
-            } else if (config.label === 'Fabrication') {
-                labelPosition.set(0.4, 0, 0.4); // Top-right
-            } else if (config.label === 'Tech/Product') {
-                labelPosition.set(-0.4, 0, -0.4); // Bottom-left
-            } else if (config.label === 'AI') {
-                labelPosition.set(0.4, 0, -0.4); // Bottom-right
-            }
-            
-            this.createLabel(config.label, labelPosition, config.direction);
-        });
+        // Position labels in screen-relative positions like traditional graph labels
+        this.createLabel('Design', new THREE.Vector3(-0.4, 0, 0.4));      // Top-left
+        this.createLabel('Fabrication', new THREE.Vector3(0.4, 0, 0.4));  // Top-right
+        this.createLabel('Tech/Product', new THREE.Vector3(-0.4, 0, -0.4)); // Bottom-left
+        this.createLabel('AI', new THREE.Vector3(0.4, 0, -0.4));          // Bottom-right
     }
 
     createCrossingLines() {
         // Remove crossing lines for clean plan view
     }
 
-    createLabel(text, pos, axisDirection) {
+    createLabel(text, pos) {
         const canvas = document.createElement('canvas');
         canvas.width = 512;
         canvas.height = 64;
