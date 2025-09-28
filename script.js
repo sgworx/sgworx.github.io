@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             100
         );
-        // Very close and low camera to match second reference image
-        this.camera.position.set(1.5, 1, 1.5);
+        // Even closer camera and zoom in more
+        this.camera.position.set(1.2, 0.8, 1.2);
         this.camera.lookAt(0, 0.3, 0); // Look slightly up at the person
     }
 
@@ -111,7 +111,7 @@ class CareerGraph3D {
 
     createAxes() {
         const axisLength = 0.5; // Slightly longer but still thin
-        const axisRadius = 0.008; // Very thin lines like reference
+        const axisRadius = 0.004; // Half as thin as before
         
         // Create centered cross made of four thick black lines on the ground plane (Y=0)
         const axesConfigs = [
@@ -135,9 +135,9 @@ class CareerGraph3D {
             if (config.direction.x !== 0) axis.rotation.z = Math.PI / 2;
             if (config.direction.z < 0 || config.direction.x < 0) axis.rotation.y = Math.PI;
             
-            // Position the axis along its direction
+            // Position the axis along its direction at the bottom of the GLB model
             axis.position.add(config.direction.clone().multiplyScalar(axisLength / 2));
-            axis.position.y = 0;
+            axis.position.y = -0.01; // Slightly below ground level to be at bottom of model
             
             this.scene.add(axis);
             this.axes.push(axis);
@@ -177,7 +177,7 @@ class CareerGraph3D {
         const textPlane = new THREE.Mesh(geometry, material);
         
         textPlane.position.copy(pos);
-        textPlane.position.y = 0.01; // Slightly above ground
+        textPlane.position.y = -0.005; // At the same level as the axes
         textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
         
         // Rotate text perpendicular to axis direction
