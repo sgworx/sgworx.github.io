@@ -279,9 +279,78 @@ class CareerGraph3D {
                 // Add active class to clicked year
                 e.target.classList.add('active');
                 
-                this.movePersonToYear(year);
+                if (year === '2017') {
+                    this.expandYearsFrom2017();
+                } else {
+                    this.movePersonToYear(year);
+                }
             });
         });
+    }
+
+    expandYearsFrom2017() {
+        // Create intermediate years between 2017 and 2022
+        const intermediateYears = ['2018', '2019', '2020', '2021'];
+        
+        // Get the years container
+        const yearsContainer = document.getElementById('years');
+        
+        // Clear existing years
+        yearsContainer.innerHTML = '';
+        
+        // Add 2017 first
+        const year2017 = document.createElement('div');
+        year2017.className = 'year active';
+        year2017.setAttribute('data-year', '2017');
+        year2017.textContent = '2017';
+        year2017.addEventListener('click', (e) => {
+            this.collapseYears();
+        });
+        yearsContainer.appendChild(year2017);
+        
+        // Add intermediate years
+        intermediateYears.forEach(year => {
+            const yearElement = document.createElement('div');
+            yearElement.className = 'year';
+            yearElement.setAttribute('data-year', year);
+            yearElement.textContent = year;
+            yearElement.addEventListener('click', (e) => {
+                // Remove active class from all years
+                yearsContainer.querySelectorAll('.year').forEach(el => el.classList.remove('active'));
+                // Add active class to clicked year
+                e.target.classList.add('active');
+                this.movePersonToYear(year);
+            });
+            yearsContainer.appendChild(yearElement);
+        });
+        
+        // Add 2022
+        const year2022 = document.createElement('div');
+        year2022.className = 'year';
+        year2022.setAttribute('data-year', '2022');
+        year2022.textContent = '2022';
+        year2022.addEventListener('click', (e) => {
+            this.collapseYears();
+        });
+        yearsContainer.appendChild(year2022);
+        
+        // Move person to 2017 position
+        this.movePersonToYear('2017');
+    }
+
+    collapseYears() {
+        // Restore original years list
+        const yearsContainer = document.getElementById('years');
+        yearsContainer.innerHTML = `
+            <div class="year" data-year="2025">2025</div>
+            <div class="year" data-year="2024">2024</div>
+            <div class="year" data-year="2023">2023</div>
+            <div class="year" data-year="2022">2022</div>
+            <div class="year" data-year="2017">2017</div>
+        `;
+        
+        // Re-setup event handlers
+        this.setupYearClickHandlers();
     }
 
     movePersonToYear(year) {
@@ -290,10 +359,14 @@ class CareerGraph3D {
         // Career progression positions on the cross
         const yearPositions = {
             '2017': { x: 0, z: 0.15 },        // More design-oriented (towards Design +Z)
-            '2022': { x: -0.1, z: 0.1 },      // Between Design (+Z) and Tech/Product (-X)
-            '2023': { x: -0.15, z: 0 },       // More towards Tech/Product (-X)
-            '2024': { x: -0.1, z: -0.1 },     // Between Tech/Product (-X) and AI (-Z)
-            '2025': { x: 0.1, z: -0.1 }       // Between AI (-Z) and Fabrication (+X)
+            '2018': { x: 0.03, z: 0.12 },     // Gradual progression from Design
+            '2019': { x: 0.06, z: 0.09 },     // Moving towards Fabrication
+            '2020': { x: 0.09, z: 0.06 },     // More towards Fabrication
+            '2021': { x: 0.12, z: 0.03 },     // Almost at Fabrication
+            '2022': { x: 0.15, z: 0 },        // At Fabrication (+X)
+            '2023': { x: 0.15, z: 0 },        // More towards Fabrication (+X)
+            '2024': { x: 0.1, z: -0.1 },      // Between Fabrication (+X) and AI (-Z)
+            '2025': { x: -0.1, z: -0.1 }      // Between AI (-Z) and Tech/Product (-X)
         };
 
         const targetPosition = yearPositions[year];
