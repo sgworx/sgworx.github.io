@@ -109,8 +109,8 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 1.2;
-        const axisRadius = 0.04;
+        const axisLength = 0.36; // 1.2 * 0.3 (70% reduction)
+        const axisRadius = 0.012; // 0.04 * 0.3 (70% reduction)
         
         // Create centered cross made of four thick black lines on the ground plane (Y=0)
         const axesConfigs = [
@@ -141,8 +141,8 @@ class CareerGraph3D {
             this.scene.add(axis);
             this.axes.push(axis);
 
-            // Create label at the end of the axis
-            const labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.2);
+            // Create label at the end of the axis (scaled down)
+            const labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.06); // 0.2 * 0.3
             this.createLabel(config.label, labelPosition);
         });
     }
@@ -166,8 +166,8 @@ class CareerGraph3D {
 
         const texture = new THREE.CanvasTexture(canvas);
         
-        // Create a plane geometry instead of sprite to lay flat on ground
-        const geometry = new THREE.PlaneGeometry(1, 0.2);
+        // Create a plane geometry instead of sprite to lay flat on ground (scaled down 70%)
+        const geometry = new THREE.PlaneGeometry(0.3, 0.06); // 1 * 0.3, 0.2 * 0.3
         const material = new THREE.MeshBasicMaterial({ 
             map: texture, 
             transparent: true,
