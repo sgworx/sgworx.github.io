@@ -143,7 +143,7 @@ class CareerGraph3D {
             this.axes.push(axis);
 
             // Create label at the end of the axis (perpendicular to axis direction)
-            const labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.08);
+            const labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.15); // Further away from axis end
             this.createLabel(config.label, labelPosition, config.direction);
         });
     }
