@@ -28,6 +28,7 @@ class CareerGraph3D {
         this.loadPersonModel();
         this.animate();
         this.setupYearClickHandlers();
+        this.setInitialPosition();
     }
 
     setupScene() {
@@ -286,6 +287,15 @@ class CareerGraph3D {
                 }
             });
         });
+    }
+
+    setInitialPosition() {
+        // Set person to 2025 position on landing
+        setTimeout(() => {
+            if (this.personModel) {
+                this.personModel.position.set(0.1, 0.08, -0.1); // 2025 position: between AI and Tech/Product
+            }
+        }, 1000); // Wait for model to load
     }
 
     expandYearsFrom2017() {
