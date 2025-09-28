@@ -167,7 +167,7 @@ class CareerGraph3D {
 
         const texture = new THREE.CanvasTexture(canvas);
         
-        // Create a plane geometry instead of sprite to lay flat on ground (very small like reference)
+        // Create a plane geometry to lay flat on ground (very small like reference)
         const geometry = new THREE.PlaneGeometry(0.15, 0.03); // Very small text labels
         const material = new THREE.MeshBasicMaterial({ 
             map: texture, 
@@ -180,11 +180,8 @@ class CareerGraph3D {
         textPlane.position.y = -0.005; // At the same level as the axes
         textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
         
-        // Rotate text perpendicular to axis direction
-        if (axisDirection) {
-            const axisAngle = Math.atan2(axisDirection.x, axisDirection.z);
-            textPlane.rotation.y = axisAngle + Math.PI / 2; // Perpendicular to axis
-        }
+        // Keep text horizontal and upright - no Y rotation
+        // Text always faces viewer directly like standard reading text
         
         this.scene.add(textPlane);
     }
