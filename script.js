@@ -137,18 +137,18 @@ class CareerGraph3D {
         // Position labels at the ends of each axis line, with proper spacing
         const labelDistance = 0.45; // Distance from center to label (slightly beyond axis end)
         
-        // Reposition labels: Design at top
-        this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance), false);      // Top
-        this.createLabel('Fabrication', new THREE.Vector3(labelDistance, 0, 0), true);  // Right - rotate 90°
-        this.createLabel('Tech/Product', new THREE.Vector3(-labelDistance, 0, 0), true); // Left - rotate 90°
-        this.createLabel('AI', new THREE.Vector3(0, 0, -labelDistance), false);         // Bottom
+        // Reposition labels: Design at top - all rotated 180°
+        this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance), '180');      // Top - rotate 180°
+        this.createLabel('Fabrication', new THREE.Vector3(labelDistance, 0, 0), '180');  // Right - rotate 180°
+        this.createLabel('Tech/Product', new THREE.Vector3(-labelDistance, 0, 0), '180'); // Left - rotate 180°
+        this.createLabel('AI', new THREE.Vector3(0, 0, -labelDistance), '180');         // Bottom - rotate 180°
     }
 
     createCrossingLines() {
         // Remove crossing lines for clean plan view
     }
 
-    createLabel(text, pos, rotate90 = false) {
+    createLabel(text, pos, rotation = false) {
         const canvas = document.createElement('canvas');
         canvas.width = 512;
         canvas.height = 90;
@@ -176,9 +176,11 @@ class CareerGraph3D {
         textPlane.position.y = -0.005; // At the same level as the axes
         textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
         
-        // Rotate the text 90 degrees if specified
-        if (rotate90) {
-            textPlane.rotation.z = Math.PI / 2; // Rotate 90 degrees while keeping flat
+        // Rotate the text based on specified rotation
+        if (rotation === true || rotation === '90') {
+            textPlane.rotation.z = Math.PI / 2; // Rotate 90 degrees
+        } else if (rotation === '180') {
+            textPlane.rotation.z = Math.PI; // Rotate 180 degrees
         }
         
         this.scene.add(textPlane);
