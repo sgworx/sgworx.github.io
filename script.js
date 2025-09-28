@@ -167,21 +167,24 @@ class CareerGraph3D {
 
         const texture = new THREE.CanvasTexture(canvas);
         
-        // Use sprite to always face camera (like 2D labels)
-        const material = new THREE.SpriteMaterial({ 
+        // Create plane geometry to lay flat on ground and stay aligned with cross
+        const geometry = new THREE.PlaneGeometry(0.3, 0.06);
+        const material = new THREE.MeshBasicMaterial({ 
             map: texture, 
-            transparent: true
+            transparent: true,
+            side: THREE.DoubleSide
         });
-        const sprite = new THREE.Sprite(material);
+        const textPlane = new THREE.Mesh(geometry, material);
         
         // Position with margin from axis end
-        sprite.position.copy(pos);
-        sprite.position.y = 0.1; // Above ground to sit on top of image layer
+        textPlane.position.copy(pos);
+        textPlane.position.y = -0.09; // Same level as cross (slightly above cross level)
         
-        // Scale to appropriate size
-        sprite.scale.set(0.3, 0.06, 1);
+        // Lay flat on ground - no rotation to keep text upright
+        textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
+        // No Y rotation - keep text always horizontal and upright
         
-        this.scene.add(sprite);
+        this.scene.add(textPlane);
     }
 
     loadPersonModel() {
