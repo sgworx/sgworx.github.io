@@ -366,7 +366,7 @@ class CareerGraph3D {
             '2022': { x: 0.15, z: 0 },        // At Fabrication (+X)
             '2023': { x: 0.15, z: 0 },        // More towards Fabrication (+X)
             '2024': { x: 0.1, z: -0.1 },      // Between Fabrication (+X) and AI (-Z)
-            '2025': { x: -0.1, z: -0.1 }      // Between AI (-Z) and Tech/Product (-X)
+            '2025': { x: 0.1, z: -0.1 }       // Between AI (-Z) and Tech/Product (+X)
         };
 
         const targetPosition = yearPositions[year];
