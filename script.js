@@ -272,11 +272,55 @@ class CareerGraph3D {
         yearElements.forEach(yearElement => {
             yearElement.addEventListener('click', (e) => {
                 const year = e.target.getAttribute('data-year');
-                console.log(`Year clicked: ${year}`);
-                // You can add specific functionality for each year here
-                // For example: this.loadYearData(year);
+                this.movePersonToYear(year);
             });
         });
+    }
+
+    movePersonToYear(year) {
+        if (!this.personModel) return;
+
+        // Career progression positions on the cross
+        const yearPositions = {
+            '2017': { x: 0, z: 0.15 },        // More design-oriented (towards Design)
+            '2022': { x: 0.1, z: 0.1 },       // Between Design and Fabrication
+            '2023': { x: 0.15, z: 0 },        // More towards Fabrication
+            '2024': { x: 0.1, z: -0.1 },      // Between Fabrication and AI
+            '2025': { x: -0.1, z: -0.1 }      // Between AI and Tech/Product
+        };
+
+        const targetPosition = yearPositions[year];
+        if (targetPosition) {
+            // Animate the person model to the new position
+            this.animatePersonToPosition(targetPosition.x, targetPosition.z);
+        }
+    }
+
+    animatePersonToPosition(targetX, targetZ) {
+        if (!this.personModel) return;
+
+        // Smooth animation to new position
+        const startX = this.personModel.position.x;
+        const startZ = this.personModel.position.z;
+        const duration = 1000; // 1 second animation
+        const startTime = Date.now();
+
+        const animate = () => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function for smooth animation
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+            
+            this.personModel.position.x = startX + (targetX - startX) * easeProgress;
+            this.personModel.position.z = startZ + (targetZ - startZ) * easeProgress;
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        
+        animate();
     }
 
     animate() {
