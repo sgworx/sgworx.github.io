@@ -41,9 +41,9 @@ class CareerGraph3D {
             0.1,
             100
         );
-        // Better initial composition - closer and more angled
-        this.camera.position.set(4, 3, 4);
-        this.camera.lookAt(0, 0, 0);
+        // Very close and low camera to match second reference image
+        this.camera.position.set(1.5, 1, 1.5);
+        this.camera.lookAt(0, 0.3, 0); // Look slightly up at the person
     }
 
     setupRenderer() {
@@ -84,11 +84,11 @@ class CareerGraph3D {
             BOTTOM: 'ArrowDown'
         };
         
-        // Limits for controls - allow much closer zoom
-        this.controls.minDistance = 1;
-        this.controls.maxDistance = 20;
-        this.controls.minPolarAngle = Math.PI * 0.1;
-        this.controls.maxPolarAngle = Math.PI * 0.5;
+        // Limits for controls - very close zoom to match reference
+        this.controls.minDistance = 0.5;
+        this.controls.maxDistance = 10;
+        this.controls.minPolarAngle = Math.PI * 0.05;
+        this.controls.maxPolarAngle = Math.PI * 0.4;
         this.controls.screenSpacePanning = false;
         
         // No auto-rotate
@@ -110,8 +110,8 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 0.36; // 1.2 * 0.3 (70% reduction)
-        const axisRadius = 0.012; // 0.04 * 0.3 (70% reduction)
+        const axisLength = 0.5; // Slightly longer but still thin
+        const axisRadius = 0.008; // Very thin lines like reference
         
         // Create centered cross made of four thick black lines on the ground plane (Y=0)
         const axesConfigs = [
@@ -142,9 +142,9 @@ class CareerGraph3D {
             this.scene.add(axis);
             this.axes.push(axis);
 
-            // Create label at the end of the axis (scaled down)
-            const labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.06); // 0.2 * 0.3
-            this.createLabel(config.label, labelPosition);
+            // Create label at the end of the axis (perpendicular to axis direction)
+            const labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.08);
+            this.createLabel(config.label, labelPosition, config.direction);
         });
     }
 
@@ -167,8 +167,8 @@ class CareerGraph3D {
 
         const texture = new THREE.CanvasTexture(canvas);
         
-        // Create a plane geometry instead of sprite to lay flat on ground (scaled down 70%)
-        const geometry = new THREE.PlaneGeometry(0.3, 0.06); // 1 * 0.3, 0.2 * 0.3
+        // Create a plane geometry instead of sprite to lay flat on ground (very small like reference)
+        const geometry = new THREE.PlaneGeometry(0.15, 0.03); // Very small text labels
         const material = new THREE.MeshBasicMaterial({ 
             map: texture, 
             transparent: true,
