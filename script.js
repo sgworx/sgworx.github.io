@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             100
         );
-        // Angled view matching the reference image - steep angle from side
-        this.camera.position.set(0.6, 1.4, -0.6); // Higher Y for steeper down angle, diagonal position
+        // Lower right perspective view - bit down and to the right
+        this.camera.position.set(1.2, 0.8, -0.6); // Right side (higher X), lower Y, angled view
         this.camera.lookAt(0, 0, 0); // Look directly at the origin
     }
 
