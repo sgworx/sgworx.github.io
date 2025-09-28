@@ -145,9 +145,9 @@ class CareerGraph3D {
             // Create label at the end of the axis with specific positioning adjustments
             let labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.12);
             
-            // Adjust Design label to move it left to avoid axis overlap
+            // Move Design label down to avoid axis overlap
             if (config.label === 'Design') {
-                labelPosition.x -= 0.05; // Move Design label slightly left
+                labelPosition.z -= 0.05; // Move Design label down (negative Z)
             }
             
             this.createLabel(config.label, labelPosition, config.direction);
