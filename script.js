@@ -274,14 +274,26 @@ class CareerGraph3D {
             yearElement.addEventListener('click', (e) => {
                 const year = e.target.getAttribute('data-year');
                 
-                // Remove active class from all years
-                yearElements.forEach(el => el.classList.remove('active'));
+                // Add click animation
+                e.target.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    e.target.style.transform = '';
+                }, 100);
                 
-                // Add active class to clicked year
-                e.target.classList.add('active');
+                // Remove active class from all years with smooth transition
+                yearElements.forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // Add active class to clicked year with delay for smooth transition
+                setTimeout(() => {
+                    e.target.classList.add('active');
+                }, 50);
                 
                 if (year === '2017') {
-                    this.expandYearsFrom2017();
+                    setTimeout(() => {
+                        this.expandYearsFrom2017();
+                    }, 200);
                 } else {
                     this.movePersonToYear(year);
                 }
@@ -337,19 +349,36 @@ class CareerGraph3D {
         
         // Add intermediate years below 2022 in correct order: 2021, 2020, 2019, 2018
         const orderedIntermediateYears = ['2021', '2020', '2019', '2018'];
-        orderedIntermediateYears.forEach(year => {
+        orderedIntermediateYears.forEach((year, index) => {
             const yearElement = document.createElement('div');
-            yearElement.className = 'year';
+            yearElement.className = 'year expanding';
             yearElement.setAttribute('data-year', year);
             yearElement.textContent = year;
+            yearElement.style.opacity = '0';
+            yearElement.style.transform = 'translateY(-10px) scale(0.9)';
+            
             yearElement.addEventListener('click', (e) => {
+                // Add click animation
+                e.target.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    e.target.style.transform = '';
+                }, 100);
+                
                 // Remove active class from all years
                 yearsContainer.querySelectorAll('.year').forEach(el => el.classList.remove('active'));
                 // Add active class to clicked year
                 e.target.classList.add('active');
                 this.movePersonToYear(year);
             });
+            
             yearsContainer.appendChild(yearElement);
+            
+            // Animate in with staggered delay
+            setTimeout(() => {
+                yearElement.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                yearElement.style.opacity = '1';
+                yearElement.style.transform = 'translateY(0) scale(1)';
+            }, 100 + (index * 50));
         });
         
         // Add 2017 at the bottom
@@ -367,18 +396,29 @@ class CareerGraph3D {
     }
 
     collapseYears() {
-        // Restore original years list
+        // Add collapse animation to intermediate years
         const yearsContainer = document.getElementById('years');
-        yearsContainer.innerHTML = `
-            <div class="year" data-year="2025">2025</div>
-            <div class="year" data-year="2024">2024</div>
-            <div class="year" data-year="2023">2023</div>
-            <div class="year" data-year="2022">2022</div>
-            <div class="year" data-year="2017">2017</div>
-        `;
+        const intermediateYears = yearsContainer.querySelectorAll('.year[data-year="2021"], .year[data-year="2020"], .year[data-year="2019"], .year[data-year="2018"]');
         
-        // Re-setup event handlers
-        this.setupYearClickHandlers();
+        intermediateYears.forEach((yearElement, index) => {
+            yearElement.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            yearElement.style.opacity = '0';
+            yearElement.style.transform = 'translateY(-10px) scale(0.9)';
+        });
+        
+        // Restore original years list after animation
+        setTimeout(() => {
+            yearsContainer.innerHTML = `
+                <div class="year" data-year="2025">2025</div>
+                <div class="year" data-year="2024">2024</div>
+                <div class="year" data-year="2023">2023</div>
+                <div class="year" data-year="2022">2022</div>
+                <div class="year" data-year="2017">2017</div>
+            `;
+            
+            // Re-setup event handlers
+            this.setupYearClickHandlers();
+        }, 300);
     }
 
     movePersonToYear(year) {

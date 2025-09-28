@@ -57,15 +57,54 @@ body {
     cursor: pointer;
     padding: 4px 8px;
     border: none;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: rgba(255, 255, 255, 0.9);
+    transform: scale(1);
+    opacity: 1;
 }
 
 .year:hover {
     background: rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
 }
 
-.year:active,
+.year:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
 .year.active {
     background: yellow;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.year.expanding {
+    animation: expandIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.year.collapsing {
+    animation: collapseOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes expandIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes collapseOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.9);
+    }
 }
