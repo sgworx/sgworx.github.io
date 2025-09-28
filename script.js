@@ -41,9 +41,9 @@ class CareerGraph3D {
             0.1,
             100
         );
-        // Zoom in even more
-        this.camera.position.set(1.0, 0.7, 1.0);
-        this.camera.lookAt(0, 0.3, 0); // Look slightly up at the person
+        // Angled view matching the reference image - steep angle from side
+        this.camera.position.set(0.6, 1.4, -0.6); // Higher Y for steeper down angle, diagonal position
+        this.camera.lookAt(0, 0, 0); // Look directly at the origin
     }
 
     setupRenderer() {
