@@ -135,9 +135,9 @@ class CareerGraph3D {
             if (config.direction.x !== 0) axis.rotation.z = Math.PI / 2;
             if (config.direction.z < 0 || config.direction.x < 0) axis.rotation.y = Math.PI;
             
-            // Position the axis along its direction at the feet of the GLB model
+            // Position the axis along its direction at the bottom of the GLB model
             axis.position.add(config.direction.clone().multiplyScalar(axisLength / 2));
-            axis.position.y = -0.1; // Move down to feet level to avoid clash
+            axis.position.y = -0.01; // Slightly below ground level to be at bottom of model
             
             this.scene.add(axis);
             this.axes.push(axis);
@@ -153,19 +153,12 @@ class CareerGraph3D {
     }
 
     createLabel(text, pos, axisDirection) {
-        // Load font and create 3D text geometry
-        const loader = new THREE.FontLoader();
-        
-        // Use a simple approach with canvas but transparent background
         const canvas = document.createElement('canvas');
         canvas.width = 512;
         canvas.height = 64;
         const ctx = canvas.getContext('2d');
-        
-        // Clear canvas with transparent background
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw only black text, no background
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.font = 'bold 36px Helvetica Neue, Helvetica, Arial, sans-serif';
         ctx.fillStyle = '#000';
         ctx.textAlign = 'center';
@@ -173,25 +166,25 @@ class CareerGraph3D {
         ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
         const texture = new THREE.CanvasTexture(canvas);
-        texture.premultiplyAlpha = false;
         
-        // Create plane geometry to lay flat on ground and stay aligned with cross
-        const geometry = new THREE.PlaneGeometry(0.3, 0.06);
+        // Create a plane geometry instead of sprite to lay flat on ground (very small like reference)
+        const geometry = new THREE.PlaneGeometry(0.15, 0.03); // Very small text labels
         const material = new THREE.MeshBasicMaterial({ 
             map: texture, 
             transparent: true,
-            alphaTest: 0.1,
             side: THREE.DoubleSide
         });
         const textPlane = new THREE.Mesh(geometry, material);
         
-        // Position with margin from axis end
         textPlane.position.copy(pos);
-        textPlane.position.y = -0.09; // Same level as cross (slightly above cross level)
-        
-        // Lay flat on ground - no rotation to keep text upright
+        textPlane.position.y = -0.005; // At the same level as the axes
         textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
-        // No Y rotation - keep text always horizontal and upright
+        
+        // Rotate text perpendicular to axis direction
+        if (axisDirection) {
+            const axisAngle = Math.atan2(axisDirection.x, axisDirection.z);
+            textPlane.rotation.y = axisAngle + Math.PI / 2; // Perpendicular to axis
+        }
         
         this.scene.add(textPlane);
     }
