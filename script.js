@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             100
         );
-        // More top-down view angle
-        this.camera.position.set(0.8, 1.6, -0.4); // Higher Y for more top view, less angled
+        // Angled view with Design at top
+        this.camera.position.set(-0.6, 1.2, -0.8); // Left side view, Design appears at top
         this.camera.lookAt(0, 0, 0); // Look directly at the origin
     }
 
@@ -137,11 +137,11 @@ class CareerGraph3D {
         // Position labels at the ends of each axis line, with proper spacing
         const labelDistance = 0.45; // Distance from center to label (slightly beyond axis end)
         
-        // Rotated 90 degrees: X becomes Z, Z becomes -X
-        this.createLabel('Design', new THREE.Vector3(-labelDistance, 0, 0), true);     // Left - rotate 90°
-        this.createLabel('Tech/Product', new THREE.Vector3(0, 0, labelDistance), false); // Top - no rotation
-        this.createLabel('Fabrication', new THREE.Vector3(0, 0, -labelDistance), false); // Bottom - no rotation
-        this.createLabel('AI', new THREE.Vector3(labelDistance, 0, 0), true);          // Right - rotate 90°
+        // Reposition labels: Design at top
+        this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance), false);      // Top
+        this.createLabel('Fabrication', new THREE.Vector3(labelDistance, 0, 0), true);  // Right - rotate 90°
+        this.createLabel('Tech/Product', new THREE.Vector3(-labelDistance, 0, 0), true); // Left - rotate 90°
+        this.createLabel('AI', new THREE.Vector3(0, 0, -labelDistance), false);         // Bottom
     }
 
     createCrossingLines() {
