@@ -68,7 +68,7 @@ class MinimalCareerScene {
             [new THREE.Vector3(-1, 0, 0), 'Tech/Product', new THREE.Vector3(-1, 0, 0)]
         ];
         const axisLength = 6;
-        const axisRadius = 0.18;
+        const axisRadius = 0.07;
         axes.forEach(([dir, label, labelDir]) => {
             // Cylinder axis
             const geometry = new THREE.CylinderGeometry(axisRadius, axisRadius, axisLength, 32, 1, false);
@@ -82,8 +82,8 @@ class MinimalCareerScene {
             axis.position.y = 0;
             this.scene.add(axis);
 
-            // Label
-            this.createLabel(label, labelDir.clone().multiplyScalar(axisLength / 2 + 0.7));
+            // Label (move further out, lay flat)
+            this.createLabel(label, labelDir.clone().multiplyScalar(axisLength / 2 + 0.6));
         });
     }
 
@@ -105,6 +105,7 @@ class MinimalCareerScene {
         sprite.position.copy(pos);
         sprite.position.y = 0.01; // Slightly above ground
         sprite.scale.set(2.5, 0.35, 1);
+        sprite.rotation.x = -Math.PI / 2; // Lay flat on ground
         this.scene.add(sprite);
     }
 
@@ -115,7 +116,7 @@ class MinimalCareerScene {
             modelPath,
             (gltf) => {
                 this.personModel = gltf.scene;
-                this.personModel.position.set(0, 0, 0);
+                this.personModel.position.set(0, 0.01, 0);
                 this.personModel.scale.set(0.18, 0.18, 0.18);
                 this.scene.add(this.personModel);
             },
