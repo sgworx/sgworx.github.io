@@ -41,7 +41,8 @@ class CareerGraph3D {
             0.1,
             100
         );
-        this.camera.position.set(10, 12, 10);
+        // Better initial composition - closer and more angled
+        this.camera.position.set(4, 3, 4);
         this.camera.lookAt(0, 0, 0);
     }
 
