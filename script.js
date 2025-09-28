@@ -140,8 +140,8 @@ class CareerGraph3D {
         
         // Reposition labels: Design at top - all rotated 180°
         this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance), '180');      // Top (positive Z)
-        this.createLabel('Fabrication', new THREE.Vector3(labelDistance, 0, 0), '180'); // Right (positive X)
         this.createLabel('Tech/Product', new THREE.Vector3(-labelDistance, 0, 0), '180'); // Left (negative X)
+        this.createLabel('Fabrication', new THREE.Vector3(labelDistance, 0, 0), '180'); // Right (positive X)
         this.createLabel('AI', new THREE.Vector3(0, 0, -labelDistance), '180');         // Bottom (negative Z)
     }
 
@@ -290,10 +290,10 @@ class CareerGraph3D {
         // Career progression positions on the cross
         const yearPositions = {
             '2017': { x: 0, z: 0.15 },        // More design-oriented (towards Design +Z)
-            '2022': { x: 0.1, z: 0.1 },       // Between Design (+Z) and Fabrication (+X)
-            '2023': { x: 0.15, z: 0 },        // More towards Fabrication (+X)
-            '2024': { x: 0.1, z: -0.1 },      // Between Fabrication (+X) and AI (-Z)
-            '2025': { x: -0.1, z: -0.1 }      // Between AI (-Z) and Tech/Product (-X)
+            '2022': { x: -0.1, z: 0.1 },      // Between Design (+Z) and Tech/Product (-X)
+            '2023': { x: -0.15, z: 0 },       // More towards Tech/Product (-X)
+            '2024': { x: -0.1, z: -0.1 },     // Between Tech/Product (-X) and AI (-Z)
+            '2025': { x: 0.1, z: -0.1 }       // Between AI (-Z) and Fabrication (+X)
         };
 
         const targetPosition = yearPositions[year];
