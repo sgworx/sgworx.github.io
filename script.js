@@ -152,7 +152,7 @@ class CareerGraph3D {
         // Remove crossing lines for clean plan view
     }
 
-    createLabel(text, pos) {
+    createLabel(text, pos, axisDirection) {
         const canvas = document.createElement('canvas');
         canvas.width = 512;
         canvas.height = 64;
@@ -179,6 +179,12 @@ class CareerGraph3D {
         textPlane.position.copy(pos);
         textPlane.position.y = 0.01; // Slightly above ground
         textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
+        
+        // Rotate text perpendicular to axis direction
+        if (axisDirection) {
+            const axisAngle = Math.atan2(axisDirection.x, axisDirection.z);
+            textPlane.rotation.y = axisAngle + Math.PI / 2; // Perpendicular to axis
+        }
         
         this.scene.add(textPlane);
     }
