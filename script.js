@@ -335,8 +335,9 @@ class CareerGraph3D {
         });
         yearsContainer.appendChild(year2022);
         
-        // Add intermediate years below 2022
-        intermediateYears.forEach(year => {
+        // Add intermediate years below 2022 in correct order: 2021, 2020, 2019, 2018
+        const orderedIntermediateYears = ['2021', '2020', '2019', '2018'];
+        orderedIntermediateYears.forEach(year => {
             const yearElement = document.createElement('div');
             yearElement.className = 'year';
             yearElement.setAttribute('data-year', year);
@@ -392,7 +393,7 @@ class CareerGraph3D {
             '2021': { x: 0.12, z: 0.03 },     // Almost at Fabrication
             '2022': { x: 0.15, z: 0 },        // At Fabrication (+X)
             '2023': { x: 0.15, z: 0 },        // More towards Fabrication (+X)
-            '2024': { x: 0.1, z: -0.1 },      // Between Fabrication (+X) and AI (-Z)
+            '2024': { x:-0.3, z: 0.1 },      // Between Fabrication (+X) and AI (-Z)
             '2025': { x: 0.1, z: -0.1 }       // Between AI (-Z) and Tech/Product (+X)
         };
 
