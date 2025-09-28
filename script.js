@@ -272,6 +272,13 @@ class CareerGraph3D {
         yearElements.forEach(yearElement => {
             yearElement.addEventListener('click', (e) => {
                 const year = e.target.getAttribute('data-year');
+                
+                // Remove active class from all years
+                yearElements.forEach(el => el.classList.remove('active'));
+                
+                // Add active class to clicked year
+                e.target.classList.add('active');
+                
                 this.movePersonToYear(year);
             });
         });
