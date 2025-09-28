@@ -27,6 +27,7 @@ class CareerGraph3D {
         this.setupEventListeners();
         this.loadPersonModel();
         this.animate();
+        this.setupYearClickHandlers();
     }
 
     setupScene() {
@@ -263,6 +264,18 @@ class CareerGraph3D {
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    }
+
+    setupYearClickHandlers() {
+        const yearElements = document.querySelectorAll('.year');
+        yearElements.forEach(yearElement => {
+            yearElement.addEventListener('click', (e) => {
+                const year = e.target.getAttribute('data-year');
+                console.log(`Year clicked: ${year}`);
+                // You can add specific functionality for each year here
+                // For example: this.loadYearData(year);
+            });
         });
     }
 
