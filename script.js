@@ -433,7 +433,7 @@ class CareerGraph3D {
             '2021': { x: 0.12, z: 0.03 },     // Almost at Fabrication
             '2022': { x: 0.15, z: 0 },        // At Fabrication (+X)
             '2023': { x: -0.15, z: 0 },        // More towards Fabrication (+X)
-            '2024': { x:-0.3, z: 0.1 },      // Between Fabrication (+X) and AI (-Z)
+            '2024': { x:0.3, z: -0.1 },      // Between Fabrication (+X) and AI (-Z)
             '2025': { x: 0.1, z: -0.1 }       // Between AI (-Z) and Tech/Product (+X)
         };
 
