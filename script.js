@@ -111,7 +111,7 @@ class CareerGraph3D {
 
     createAxes() {
         const axisLength = 0.8; // Full cross length (was creating 4 separate pieces)
-        const axisRadius = 0.004; // Keep same thickness
+        const axisRadius = 0.002; // Half as thin
         
         // Create two continuous lines that form a cross (not 4 separate pieces)
         
