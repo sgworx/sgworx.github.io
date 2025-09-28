@@ -137,10 +137,11 @@ class CareerGraph3D {
         // Position labels at the ends of each axis line, with proper spacing
         const labelDistance = 0.45; // Distance from center to label (slightly beyond axis end)
         
-        this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance));      // Top (positive Z)
-        this.createLabel('Fabrication', new THREE.Vector3(labelDistance, 0, 0)); // Right (positive X)
-        this.createLabel('AI', new THREE.Vector3(0, 0, -labelDistance));         // Bottom (negative Z)
-        this.createLabel('Tech/Product', new THREE.Vector3(-labelDistance, 0, 0)); // Left (negative X)
+        // Rotated 90 degrees: X becomes Z, Z becomes -X
+        this.createLabel('Design', new THREE.Vector3(-labelDistance, 0, 0));     // Left (was top)
+        this.createLabel('Tech/Product', new THREE.Vector3(0, 0, labelDistance)); // Top (was left)
+        this.createLabel('Fabrication', new THREE.Vector3(0, 0, -labelDistance)); // Bottom (was right)
+        this.createLabel('AI', new THREE.Vector3(labelDistance, 0, 0));          // Right (was bottom)
     }
 
     createCrossingLines() {
