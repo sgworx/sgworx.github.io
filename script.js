@@ -153,12 +153,19 @@ class CareerGraph3D {
     }
 
     createLabel(text, pos, axisDirection) {
+        // Load font and create 3D text geometry
+        const loader = new THREE.FontLoader();
+        
+        // Use a simple approach with canvas but transparent background
         const canvas = document.createElement('canvas');
         canvas.width = 512;
         canvas.height = 64;
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Clear canvas with transparent background
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw only black text, no background
         ctx.font = 'bold 36px Helvetica Neue, Helvetica, Arial, sans-serif';
         ctx.fillStyle = '#000';
         ctx.textAlign = 'center';
@@ -166,12 +173,14 @@ class CareerGraph3D {
         ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
         const texture = new THREE.CanvasTexture(canvas);
+        texture.premultiplyAlpha = false;
         
         // Create plane geometry to lay flat on ground and stay aligned with cross
         const geometry = new THREE.PlaneGeometry(0.3, 0.06);
         const material = new THREE.MeshBasicMaterial({ 
             map: texture, 
             transparent: true,
+            alphaTest: 0.1,
             side: THREE.DoubleSide
         });
         const textPlane = new THREE.Mesh(geometry, material);
