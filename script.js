@@ -12,7 +12,7 @@ class MinimalCareerScene {
             0.1,
             100
         );
-        this.camera.position.set(10, 12, 10);
+        this.camera.position.set(2, 2.2, 2);
         this.camera.lookAt(0, 0, 0);
 
         this.renderer = new THREE.WebGLRenderer({
@@ -67,8 +67,8 @@ class MinimalCareerScene {
             [new THREE.Vector3(0, 0, -1), 'AI', new THREE.Vector3(0, 0, -1)],
             [new THREE.Vector3(-1, 0, 0), 'Tech/Product', new THREE.Vector3(-1, 0, 0)]
         ];
-        const axisLength = 6;
-        const axisRadius = 0.07;
+        const axisLength = 1.2;
+        const axisRadius = 0.04;
         axes.forEach(([dir, label, labelDir]) => {
             // Cylinder axis
             const geometry = new THREE.CylinderGeometry(axisRadius, axisRadius, axisLength, 32, 1, false);
@@ -83,7 +83,7 @@ class MinimalCareerScene {
             this.scene.add(axis);
 
             // Label (move further out, lay flat)
-            this.createLabel(label, labelDir.clone().multiplyScalar(axisLength / 2 + 0.6));
+            this.createLabel(label, labelDir.clone().multiplyScalar(axisLength / 2 + 0.2));
         });
     }
 
@@ -117,7 +117,7 @@ class MinimalCareerScene {
             (gltf) => {
                 this.personModel = gltf.scene;
                 this.personModel.position.set(0, 0.01, 0);
-                this.personModel.scale.set(1, 1, 1);
+                this.personModel.scale.set(0.18, 0.18, 0.18);
                 this.scene.add(this.personModel);
             },
             undefined,
