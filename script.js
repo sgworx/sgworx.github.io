@@ -134,11 +134,13 @@ class CareerGraph3D {
         this.scene.add(verticalAxis);
         this.axes.push(verticalAxis);
 
-        // Position labels in screen-relative positions like traditional graph labels
-        this.createLabel('Design', new THREE.Vector3(-0.4, 0, 0.4));      // Top-left
-        this.createLabel('Fabrication', new THREE.Vector3(0.4, 0, 0.4));  // Top-right
-        this.createLabel('Tech/Product', new THREE.Vector3(-0.4, 0, -0.4)); // Bottom-left
-        this.createLabel('AI', new THREE.Vector3(0.4, 0, -0.4));          // Bottom-right
+        // Position labels at the ends of each axis line, with proper spacing
+        const labelDistance = 0.45; // Distance from center to label (slightly beyond axis end)
+        
+        this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance));      // Top (positive Z)
+        this.createLabel('Fabrication', new THREE.Vector3(labelDistance, 0, 0)); // Right (positive X)
+        this.createLabel('AI', new THREE.Vector3(0, 0, -labelDistance));         // Bottom (negative Z)
+        this.createLabel('Tech/Product', new THREE.Vector3(-labelDistance, 0, 0)); // Left (negative X)
     }
 
     createCrossingLines() {
