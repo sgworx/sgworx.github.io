@@ -83,10 +83,10 @@ class CareerGraph3D {
             BOTTOM: 'ArrowDown'
         };
         
-        // Limits for controls
-        this.controls.minDistance = 4;
+        // Limits for controls - allow much closer zoom
+        this.controls.minDistance = 1;
         this.controls.maxDistance = 20;
-        this.controls.minPolarAngle = Math.PI * 0.2;
+        this.controls.minPolarAngle = Math.PI * 0.1;
         this.controls.maxPolarAngle = Math.PI * 0.5;
         this.controls.screenSpacePanning = false;
         
