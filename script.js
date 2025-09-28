@@ -41,8 +41,8 @@ class CareerGraph3D {
             0.1,
             100
         );
-        // Even closer camera and zoom in more
-        this.camera.position.set(1.2, 0.8, 1.2);
+        // Zoom in even more
+        this.camera.position.set(1.0, 0.7, 1.0);
         this.camera.lookAt(0, 0.3, 0); // Look slightly up at the person
     }
 
@@ -110,8 +110,8 @@ class CareerGraph3D {
     }
 
     createAxes() {
-        const axisLength = 0.5; // Slightly longer but still thin
-        const axisRadius = 0.004; // Half as thin as before
+        const axisLength = 0.4; // Scale down by 20% (0.5 * 0.8)
+        const axisRadius = 0.004; // Keep same thickness
         
         // Create centered cross made of four thick black lines on the ground plane (Y=0)
         const axesConfigs = [
@@ -143,7 +143,7 @@ class CareerGraph3D {
             this.axes.push(axis);
 
             // Create label at the end of the axis (perpendicular to axis direction)
-            const labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.15); // Further away from axis end
+            const labelPosition = config.direction.clone().multiplyScalar(axisLength / 2 + 0.12); // Adjust for smaller cross
             this.createLabel(config.label, labelPosition, config.direction);
         });
     }
