@@ -289,11 +289,11 @@ class CareerGraph3D {
 
         // Career progression positions on the cross
         const yearPositions = {
-            '2017': { x: 0, z: 0.15 },        // More design-oriented (towards Design)
-            '2022': { x: 0.1, z: 0.1 },       // Between Design and Fabrication
-            '2023': { x: 0.15, z: 0 },        // More towards Fabrication
-            '2024': { x: 0.1, z: -0.1 },      // Between Fabrication and AI
-            '2025': { x: -0.1, z: -0.1 }      // Between AI and Tech/Product
+            '2017': { x: 0, z: 0.15 },        // More design-oriented (towards Design +Z)
+            '2022': { x: -0.1, z: 0.1 },      // Between Design (+Z) and Fabrication (-X)
+            '2023': { x: -0.15, z: 0 },       // More towards Fabrication (-X)
+            '2024': { x: -0.1, z: -0.1 },     // Between Fabrication (-X) and AI (-Z)
+            '2025': { x: 0.1, z: -0.1 }       // Between AI (-Z) and Tech/Product (+X)
         };
 
         const targetPosition = yearPositions[year];
