@@ -138,17 +138,17 @@ class CareerGraph3D {
         const labelDistance = 0.45; // Distance from center to label (slightly beyond axis end)
         
         // Rotated 90 degrees: X becomes Z, Z becomes -X
-        this.createLabel('Design', new THREE.Vector3(-labelDistance, 0, 0));     // Left (was top)
-        this.createLabel('Tech/Product', new THREE.Vector3(0, 0, labelDistance)); // Top (was left)
-        this.createLabel('Fabrication', new THREE.Vector3(0, 0, -labelDistance)); // Bottom (was right)
-        this.createLabel('AI', new THREE.Vector3(labelDistance, 0, 0));          // Right (was bottom)
+        this.createLabel('Design', new THREE.Vector3(-labelDistance, 0, 0), true);     // Left - rotate 90°
+        this.createLabel('Tech/Product', new THREE.Vector3(0, 0, labelDistance), false); // Top - no rotation
+        this.createLabel('Fabrication', new THREE.Vector3(0, 0, -labelDistance), false); // Bottom - no rotation
+        this.createLabel('AI', new THREE.Vector3(labelDistance, 0, 0), true);          // Right - rotate 90°
     }
 
     createCrossingLines() {
         // Remove crossing lines for clean plan view
     }
 
-    createLabel(text, pos) {
+    createLabel(text, pos, rotate90 = false) {
         const canvas = document.createElement('canvas');
         canvas.width = 512;
         canvas.height = 128;
@@ -176,8 +176,10 @@ class CareerGraph3D {
         textPlane.position.y = -0.005; // At the same level as the axes
         textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
         
-        // Keep text horizontal and upright - no Y rotation
-        // Text always faces viewer directly like standard reading text
+        // Rotate the text 90 degrees if specified
+        if (rotate90) {
+            textPlane.rotation.z = Math.PI / 2; // Rotate 90 degrees while keeping flat
+        }
         
         this.scene.add(textPlane);
     }
