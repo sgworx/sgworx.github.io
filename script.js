@@ -386,9 +386,9 @@ class CareerGraph3D {
         // Career progression positions on the cross
         const yearPositions = {
             '2017': { x: 0, z: 0.15 },        // More design-oriented (towards Design +Z)
-            '2018': { x: 0.03, z: 0.12 },     // Gradual progression from Design
+            '2018': { x: -0.03, z: -0.12 },     // Gradual progression from Design
             '2019': { x: 0.06, z: 0.09 },     // Moving towards Fabrication
-            '2020': { x: 0.09, z: 0.06 },     // More towards Fabrication
+            '2020': { x: -0.09, z: 0.06 },     // More towards Fabrication
             '2021': { x: 0.12, z: 0.03 },     // Almost at Fabrication
             '2022': { x: 0.15, z: 0 },        // At Fabrication (+X)
             '2023': { x: 0.15, z: 0 },        // More towards Fabrication (+X)
