@@ -42,7 +42,7 @@ class CareerGraph3D {
             100
         );
         // Rotated cross view - more to the right and lower
-        this.camera.position.set(0.4, 1.0, -1.0); // More to the right, lower angle
+        this.camera.position.set(0.5, 1.2, -1.2); // Slightly zoomed out, more to the right, lower angle
         this.camera.lookAt(0, 0, 0); // Look directly at the origin
     }
 
@@ -111,7 +111,7 @@ class CareerGraph3D {
 
     createAxes() {
         const axisLength = 0.8; // Full cross length (was creating 4 separate pieces)
-        const axisRadius = 0.002; // Half as thin
+        const axisRadius = 0.001; // Half as thin again
         
         // Create two continuous lines that form a cross (not 4 separate pieces)
         
