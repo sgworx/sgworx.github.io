@@ -167,26 +167,21 @@ class CareerGraph3D {
 
         const texture = new THREE.CanvasTexture(canvas);
         
-        // Create a plane geometry instead of sprite to lay flat on ground (very small like reference)
-        const geometry = new THREE.PlaneGeometry(0.15, 0.03); // Very small text labels
-        const material = new THREE.MeshBasicMaterial({ 
+        // Use sprite to always face camera (like 2D labels)
+        const material = new THREE.SpriteMaterial({ 
             map: texture, 
-            transparent: true,
-            side: THREE.DoubleSide
+            transparent: true
         });
-        const textPlane = new THREE.Mesh(geometry, material);
+        const sprite = new THREE.Sprite(material);
         
-        textPlane.position.copy(pos);
-        textPlane.position.y = -0.005; // At the same level as the axes
-        textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
+        // Position with margin from axis end
+        sprite.position.copy(pos);
+        sprite.position.y = 0.1; // Above ground to sit on top of image layer
         
-        // Rotate text perpendicular to axis direction
-        if (axisDirection) {
-            const axisAngle = Math.atan2(axisDirection.x, axisDirection.z);
-            textPlane.rotation.y = axisAngle + Math.PI / 2; // Perpendicular to axis
-        }
+        // Scale to appropriate size
+        sprite.scale.set(0.3, 0.06, 1);
         
-        this.scene.add(textPlane);
+        this.scene.add(sprite);
     }
 
     loadPersonModel() {
