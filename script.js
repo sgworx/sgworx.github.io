@@ -165,13 +165,21 @@ class CareerGraph3D {
         ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
         const texture = new THREE.CanvasTexture(canvas);
-        const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
-        const sprite = new THREE.Sprite(material);
-        sprite.position.copy(pos);
-        sprite.position.y = 0.01; // Slightly above ground
-        sprite.scale.set(2.5, 0.35, 1);
-        sprite.rotation.x = -Math.PI / 2; // Lay flat on ground
-        this.scene.add(sprite);
+        
+        // Create a plane geometry instead of sprite to lay flat on ground
+        const geometry = new THREE.PlaneGeometry(1, 0.2);
+        const material = new THREE.MeshBasicMaterial({ 
+            map: texture, 
+            transparent: true,
+            side: THREE.DoubleSide
+        });
+        const textPlane = new THREE.Mesh(geometry, material);
+        
+        textPlane.position.copy(pos);
+        textPlane.position.y = 0.01; // Slightly above ground
+        textPlane.rotation.x = -Math.PI / 2; // Lay flat on ground
+        
+        this.scene.add(textPlane);
     }
 
     loadPersonModel() {
