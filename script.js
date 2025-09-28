@@ -117,7 +117,7 @@ class MinimalCareerScene {
             (gltf) => {
                 this.personModel = gltf.scene;
                 this.personModel.position.set(0, 0.01, 0);
-                this.personModel.scale.set(0.18, 0.18, 0.18);
+                this.personModel.scale.set(1, 1, 1);
                 this.scene.add(this.personModel);
             },
             undefined,
