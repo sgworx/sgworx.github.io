@@ -139,10 +139,10 @@ class CareerGraph3D {
         const labelDistance = 0.35; // Distance from center to label (increased to prevent overlap)
         
         // Reposition labels: Design at top - all rotated 180°
-        this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance), '180');      // Top - rotate 180°
-        this.createLabel('Tech/Product', new THREE.Vector3(labelDistance, 0, 0), '180'); // Right - rotate 180°
-        this.createLabel('Fabrication', new THREE.Vector3(-labelDistance, 0, 0), '180');  // Left - rotate 180°
-        this.createLabel('AI', new THREE.Vector3(0, 0, -labelDistance), '180');         // Bottom - rotate 180°
+        this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance), '180');      // Top (positive Z)
+        this.createLabel('Tech/Product', new THREE.Vector3(-labelDistance, 0, 0), '180'); // Right (negative X)
+        this.createLabel('Fabrication', new THREE.Vector3(labelDistance, 0, 0), '180');  // Left (positive X)
+        this.createLabel('AI', new THREE.Vector3(0, 0, -labelDistance), '180');         // Bottom (negative Z)
     }
 
     createCrossingLines() {
@@ -290,10 +290,10 @@ class CareerGraph3D {
         // Career progression positions on the cross
         const yearPositions = {
             '2017': { x: 0, z: 0.15 },        // More design-oriented (towards Design +Z)
-            '2022': { x: -0.1, z: 0.1 },      // Between Design (+Z) and Fabrication (-X)
-            '2023': { x: -0.15, z: 0 },       // More towards Fabrication (-X)
-            '2024': { x: -0.1, z: -0.1 },     // Between Fabrication (-X) and AI (-Z)
-            '2025': { x: 0.1, z: -0.1 }       // Between AI (-Z) and Tech/Product (+X)
+            '2022': { x: 0.1, z: 0.1 },       // Between Design (+Z) and Fabrication (+X)
+            '2023': { x: 0.15, z: 0 },        // More towards Fabrication (+X)
+            '2024': { x: 0.1, z: -0.1 },      // Between Fabrication (+X) and AI (-Z)
+            '2025': { x: -0.1, z: -0.1 }      // Between AI (-Z) and Tech/Product (-X)
         };
 
         const targetPosition = yearPositions[year];
