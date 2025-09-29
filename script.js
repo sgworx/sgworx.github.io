@@ -44,7 +44,7 @@ class CareerGraph3D {
             100
         );
         // Rotated cross view - more to the right and lower
-        this.camera.position.set(0.6, 1.4, -1.4); // Zoomed out a bit more, more to the right, lower angle
+        this.camera.position.set(0.4, 1.0, -1.0); // Zoomed in a bit more, more to the right, lower angle
         this.camera.lookAt(0, 0, 0); // Look directly at the origin
     }
 
