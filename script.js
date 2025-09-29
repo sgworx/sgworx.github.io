@@ -433,7 +433,7 @@ class CareerGraph3D {
             '2021': { x: -0.3, z: 0.05 },      // Near peak Fabrication
             '2022': { x: -0.25, z: 0.0 },      // Peak Fabrication (+X) — all-in on making/building
             '2023': { x: -0.25, z: -0.1 },     // Slight exploration of AI (-Z) while still very Fabrication heavy
-            '2024': { x: 0.1, z: -0.2 },      // Between AI (-Z) and Fabrication (+X)
+            '2024': { x: 0.1, z: -0.25 },      // Between AI (-Z) and Fabrication (+X)
             '2025': { x: 0.15, z: -0.15 }      // Diagonal balance between AI (-Z) and Tech/Product (-X)
         };
 
