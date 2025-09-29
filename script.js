@@ -142,7 +142,7 @@ class CareerGraph3D {
         // Reposition labels: Design at top - all rotated 
         this.createLabel('Design', new THREE.Vector3(0, 0, labelDistance), '180');      // Top (positive Z)
         this.createLabel('Fabrication', new THREE.Vector3(-labelDistance, 0, 0), '90'); // Left (negative X)
-        this.createLabel('Tech / Product', new THREE.Vector3(labelDistance, 0, 0), '360'); // Right (positive X)
+        this.createLabel('Tech / Product', new THREE.Vector3(labelDistance, 0, 0), '90'); // Right (positive X)
         this.createLabel('AI', new THREE.Vector3(0, 0, -labelDistance), '360');         // Bottom (negative Z)
     }
 
